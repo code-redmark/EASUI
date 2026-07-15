@@ -13,6 +13,7 @@
 enum TYPE_NUMBER
 {
 
+        EASUI_WINDOW_NUMBER,
         EASUI_TEXTBOX_NUMBER,
         EASUI_LABEL_NUMBER
 
@@ -22,6 +23,17 @@ enum TYPE_NUMBER
 // ================================================== [WINDOW] =================================================
 
         typedef struct EASUI_WINDOW EASUI_WINDOW;
+
+
+        struct EASUI_WINDOW
+        {
+
+                char TYPE;
+                unsigned short MAX_ELEMENT_COUNT;
+                void** ELEMENT_LIST;
+                unsigned int WIDTH, HEIGHT;
+
+        };
 
 // =============================================================================================================
 

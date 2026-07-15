@@ -1,5 +1,5 @@
 #include "EASUI/EASUI.h"
-#include "EASUI/COMMON/STRINGS.h"
+#include "EASUI/DEPENDENCIES/COMMON/STRINGS.h"
 
 
 
