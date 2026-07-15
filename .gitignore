@@ -16,6 +16,10 @@
 # Mono auto generated files
 mono_crash.*
 
+# Pls ignore my folders
+.zed/
+NOOUBY'S_OUTPUT/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
