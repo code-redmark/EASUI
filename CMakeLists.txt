@@ -1,8 +1,35 @@
-﻿cmake_minimum_required (VERSION 3.10)
-project ("OpenGLLibrary")
+﻿cmake_minimum_required(VERSION 3.15)
+project(EASUI)
 
-file(GLOB_RECURSE C_SRC "EASUI/*.c")
+find_package(OpenGL REQUIRED)
 
-add_executable("OpenGLLibrary"
-		${C_SRC}
+# -- Glad setup
+
+add_library(glad STATIC 
+    EASUI/DEPENDENCIES/glad/src/glad.c
+)
+
+target_include_directories(glad PUBLIC 
+    EASUI/DEPENDENCIES/glad/include
+)
+
+
+
+
+
+file(GLOB_RECURSE C_CODE "EASUI/*.c" "EASUI/*.cpp")
+
+add_executable(EASUI 
+    ${C_CODE}
+)
+
+# -- GLFW setup
+target_link_directories(EASUI PRIVATE 
+    "${CMAKE_SOURCE_DIR}/EASUI/DEPENDENCIES/GLFW/lib"
+)
+
+target_link_libraries(EASUI PRIVATE 
+    OpenGL::GL
+    glad
+    "glfw3.lib"
 )

@@ -8,9 +8,7 @@ int main()
 
         EASUI_LABEL LABEL_1;
 
-
         SET_NEW_EASUI_LABEL(&LABEL_1, 0, 0, 10, 2, 12, 1024);
-
 
         STRING_APPEND(LABEL_1.TEXT, "HELLO WORLD");
 
