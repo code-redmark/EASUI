@@ -17,7 +17,7 @@ int main()
         // [RUN PART]
         {
 
-                SET_NEW_EASUI_WINDOW(&TEST_WINDOW, 16, 300, 200);
+                SET_NEW_EASUI_WINDOW(&TEST_WINDOW, "HELLO", 16, 300, 200);
 
 
                 printf("ADDRESS OF WINDOW ELEMENT_LIST = %p\n\n", TEST_WINDOW.ELEMENT_LIST);
@@ -32,6 +32,9 @@ int main()
 
                 printf("ADDRESS OF TEST_LABEL_2 = %p\n", &TEST_LABEL_2);
                 printf("ADDRESS OF WINDOW ELEMENT_LIST[1] (SHOULD BE TEST_LABEL_2) = %p\n", TEST_WINDOW.ELEMENT_LIST[1]);
+
+
+                TEST_WINDOW.START(&TEST_WINDOW);
 
         }
 

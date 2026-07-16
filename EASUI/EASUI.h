@@ -2,11 +2,11 @@
 #ifdef EASUI
 
 
-
 #include "MEMORY_ARENA/MEMORY_ARENA.h"
-#include <stdio.h>
-#include <stdlib.h>
-
+#include "DEPENDENCIES/COMMON/STRINGS.h"
+#include "DEPENDENCIES/glad/include/glad/glad.h"
+#include <pthread.h>
+#include <SDL3/SDL.h>
 
 
 #define EASUI_ERROR 0
@@ -24,11 +24,13 @@ enum TYPE_NUMBER
 };
 
 
-void EASUI_INIT();
+int EASUI_INIT();
 void EASUI_END();
 
 
 int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT);
+
+
 
 
 // ================================================== [WINDOW] =================================================
@@ -40,15 +42,20 @@ int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT);
         {
 
                 char TYPE;
-                unsigned short MAX_ELEMENT_COUNT;
+                SDL_Window* SDL_WINDOW;
+                SDL_GLContext SDL_CONTEXT;
                 void** ELEMENT_LIST;
+                pthread_t THREAD;
+                unsigned short MAX_ELEMENT_COUNT;
                 unsigned int WIDTH, HEIGHT;
                 int (*ADD_ELEMENT)(EASUI_WINDOW* WINDOW, void* ELEMENT);
+                int (*START)(EASUI_WINDOW* WINDOW);
+                char* TITLE;
 
         };
 
 
-        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT);
+        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT);
 
 // =============================================================================================================
 

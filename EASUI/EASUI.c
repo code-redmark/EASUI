@@ -2,22 +2,27 @@
 
 
 
-#define DEFAULT_PROGRAM_ARENA_SIZE 1024
-
-
-
-void EASUI_INIT()
+int EASUI_INIT()
 {
 
-        INIT_MEMORY_AREMA(DEFAULT_PROGRAM_ARENA_SIZE);
-
-}
+        INIT_MEMORY_AREMA(1024);
 
 
-void EASUI_END()
-{
+        if (!SDL_Init(SDL_INIT_VIDEO))
+        {
 
-        FREE_MEMORY_ARENA();
+                return EASUI_ERROR;
+
+        }
+
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+
+        return EASUI_OK;
 
 }
 
@@ -46,5 +51,13 @@ int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT)
 
 
         return EASUI_OK;
+
+}
+
+
+void EASUI_END()
+{
+
+        FREE_MEMORY_ARENA();
 
 }
