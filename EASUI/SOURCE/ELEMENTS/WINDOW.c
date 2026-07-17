@@ -1,5 +1,4 @@
-#include "../EASUI.h"
-#include <X11/X.h>
+#include "../../EASUI.h"
 
 
 

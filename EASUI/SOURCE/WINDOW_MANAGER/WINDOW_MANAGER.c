@@ -1,4 +1,4 @@
-#include "../EASUI.h"
+#include "../../EASUI.h"
 
 
 
@@ -6,8 +6,8 @@ EASUI_WINDOW** WINDOW_LIST;
 EASUI_WINDOW* ACTIVE_WINDOW;
 
 
-
 unsigned long MAX_WINDOW_COUNT;
+
 
 int GET_LAST_WINDOW_INDEX();
 

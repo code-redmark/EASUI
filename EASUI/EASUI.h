@@ -2,7 +2,7 @@
 #ifdef EASUI
 
 
-#include "MEMORY_ARENA/MEMORY_ARENA.h"
+#include "SOURCE/MEMORY_ARENA/MEMORY_ARENA.h"
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include "DEPENDENCIES/glad/include/glad/glad.h"
 #include <pthread.h>
