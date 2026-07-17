@@ -21,6 +21,7 @@ mono_crash.*
 NOOUBYS_OUTPUT/
 test/
 out/
+../.vs/
 
 # Build results
 [Dd]ebug/
