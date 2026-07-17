@@ -4,7 +4,7 @@
 
 #include "SOURCE/MEMORY_ARENA/MEMORY_ARENA.h"
 #include "DEPENDENCIES/COMMON/STRINGS.h"
-#include "DEPENDENCIES/glad/include/glad/glad.h"
+#include "DEPENDENCIES/GLAD/include/glad/glad.h"
 #include <pthread.h>
 #include <SDL3/SDL.h>
 
