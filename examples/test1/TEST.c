@@ -1,8 +1,5 @@
-#include "EASUI/EASUI.h"
+#include "../../EASUI/EASUI/EASUI.h"
 #include <stdio.h>
-#include <unistd.h>
-
-
 
 int main()
 {
@@ -39,9 +36,12 @@ int main()
                 TEST_WINDOW.START(&TEST_WINDOW);
                 TEST_WINDOW_2.START(&TEST_WINDOW_2);
 
+
+                int c = getchar(); // just blocking exec
+
         }
 
-        //EASUI_END();
+        EASUI_END();
 
 
 
