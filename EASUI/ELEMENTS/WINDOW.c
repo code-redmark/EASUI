@@ -1,20 +1,13 @@
 #include "../EASUI.h"
 #include <X11/X.h>
-#include <stdlib.h>
 
 
 
 
-int GET_LAST_ELEMENT_INDEX(EASUI_WINDOW* WINDOW);
-
-
-int ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT);
+int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT);
 
 
 int START(EASUI_WINDOW* WINDOW);
-
-
-void* WINDOW_MAIN__THREAD(void* arg);
 
 
 
@@ -22,25 +15,15 @@ void* WINDOW_MAIN__THREAD(void* arg);
 int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT)
 {
 
-        // [SET BASE VALUES]
-        {
-
-                WINDOW->TYPE = EASUI_WINDOW_NUMBER;
-                WINDOW->MAX_ELEMENT_COUNT = MAX_ELEMENT_COUNT;
-                WINDOW->WIDTH = WIDTH;
-                WINDOW->HEIGHT = HEIGHT;
-                WINDOW->ADD_ELEMENT = ADD_ELEMENT;
-                WINDOW->START = START;
-
-        }
-
-
         // [CHECK FOR NULL POINTERS]
         {
 
                 if (WINDOW == NULL || TITLE == NULL)
                 {
 
+                        LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : BAD_ARGUMENTS");
+
+
                         return EASUI_ERROR;
 
                 }
@@ -48,21 +31,32 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
         }
 
 
-        // [ALLOCATE MEMORY FOR ELEMENT LIST]
+        // [SET BASE VALUES]
         {
 
-                WINDOW->ELEMENT_LIST = MEMORY_ARENA_ALLOC(sizeof(void*) * MAX_ELEMENT_COUNT + 1);
+                WINDOW->TYPE = EASUI_WINDOW_NUMBER;
+                WINDOW->STATUS = EASUI_WINDOW_UNINITIALIZED;
+                WINDOW->WIDTH = WIDTH;
+                WINDOW->HEIGHT = HEIGHT;
+                WINDOW->ACTIVE_SCREEN = &WINDOW->DEFAULT_SCREEN;
+                WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
+                WINDOW->START = START;
+
+        }
 
 
-                if (WINDOW->ELEMENT_LIST == NULL)
+        // [ALLOCATE MEMORY FOR DEFAULT SCREEN ELEMENT LIST]
+        {
+
+                const int SET_DEFAULT_SCREEN_STATUS = SET_NEW_EASUI_SCREEN(&WINDOW->DEFAULT_SCREEN, MAX_ELEMENT_COUNT);
+
+
+                if (SET_DEFAULT_SCREEN_STATUS == EASUI_ERROR)
                 {
 
                         return EASUI_ERROR;
 
                 }
-
-
-                WINDOW->ELEMENT_LIST[0] = NULL;
 
         }
 
@@ -70,14 +64,17 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
         //  [ALLOCATE MEMORY FOR TITLE]
         {
 
-                const unsigned long SIZE = STRING_SIZE(TITLE);
+                const unsigned long TITLE_SIZE = STRING_SIZE(TITLE);
 
 
-                WINDOW->TITLE = malloc(SIZE);
+                WINDOW->TITLE = MEMORY_ARENA_ALLOC(TITLE_SIZE);
 
 
                 if (WINDOW->TITLE == NULL)
                 {
+
+                        LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : FAILED TO ALLOCATED MEMORY FOR WINDOW TITLE");
+
 
                         return EASUI_ERROR;
 
@@ -85,6 +82,28 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
 
 
                 STRING_COPY(WINDOW->TITLE, TITLE);
+
+        }
+
+
+        WINDOW->STATUS = EASUI_WINDOW_READY;
+
+
+        // [ADD WINDOW TO WINDOW LIST]
+        {
+
+                int ADD_WINDOW_STATUS = EASUI__ADD_WINDOW_TO_WINDOW_LIST(WINDOW);
+
+
+                if (ADD_WINDOW_STATUS == EASUI_ERROR)
+                {
+
+                        WINDOW->STATUS = EASUI_WINDOW_UNINITIALIZED;
+
+
+                        return EASUI_ERROR;
+
+                }
 
         }
 
@@ -106,7 +125,7 @@ int START(EASUI_WINDOW* WINDOW)
                 if (!WINDOW->SDL_WINDOW)
                 {
 
-                        SDL_Quit();
+                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL WINDOW");
 
 
                         return EASUI_ERROR;
@@ -123,7 +142,7 @@ int START(EASUI_WINDOW* WINDOW)
                         SDL_DestroyWindow(WINDOW->SDL_WINDOW);
 
 
-                        SDL_Quit();
+                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL CONTEXT");
 
 
                         return EASUI_ERROR;
@@ -138,83 +157,18 @@ int START(EASUI_WINDOW* WINDOW)
         }
 
 
-        // [CREATE THREAD]
-        {
-
-                const int CREATE_PTHREAD_STATUS = pthread_create(&WINDOW->THREAD, NULL, WINDOW_MAIN__THREAD, (void*)WINDOW);
-
-
-                if (CREATE_PTHREAD_STATUS != 0)
-                {
-
-                        return EASUI_ERROR;
-
-                }
-
-
-                pthread_join(WINDOW->THREAD, NULL);
-
-        }
-
-
-
         return EASUI_OK;
 
 }
 
 
-void* WINDOW_MAIN__THREAD(void* VOID_WINDOW)
+int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
 {
 
-        EASUI_WINDOW* WINDOW = (EASUI_WINDOW*)VOID_WINDOW;
+        int ADD_ELEMENT_STATUS = (WINDOW->DEFAULT_SCREEN).ADD_ELEMENT(&WINDOW->DEFAULT_SCREEN, ELEMENT);
 
 
-        bool IS_RUNNING = TRUE;
-        SDL_Event EVENT;
-
-
-        while (IS_RUNNING)
-        {
-
-
-                while (SDL_PollEvent(&EVENT))
-                {
-
-                        if (EVENT.type == SDL_EVENT_QUIT)
-                        {
-
-                                IS_RUNNING = false;
-
-                        }
-
-                }
-
-
-                glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-                SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
-        }
-
-
-        SDL_GL_DestroyContext(WINDOW->SDL_CONTEXT);
-        SDL_DestroyWindow(WINDOW->SDL_WINDOW);
-        SDL_Quit();
-
-
-        return NULL;
-
-}
-
-
-int ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
-{
-
-        const int LAST_ELEMENT_INDEX = GET_LAST_ELEMENT_INDEX(WINDOW);
-
-
-        if (LAST_ELEMENT_INDEX + 2 >= WINDOW->MAX_ELEMENT_COUNT)
+        if (ADD_ELEMENT_STATUS == EASUI_ERROR)
         {
 
                 return EASUI_ERROR;
@@ -222,24 +176,6 @@ int ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
         }
 
 
-        WINDOW->ELEMENT_LIST[LAST_ELEMENT_INDEX + 1] = ELEMENT;
-        WINDOW->ELEMENT_LIST[LAST_ELEMENT_INDEX + 2] = NULL;
-
-
-        return 0;
-
-}
-
-
-int GET_LAST_ELEMENT_INDEX(EASUI_WINDOW* WINDOW)
-{
-
-        int INDEX = 0;
-
-
-        for (; WINDOW->ELEMENT_LIST[INDEX] != NULL; INDEX ++);
-
-
-        return INDEX - 1;
+        return EASUI_OK;
 
 }

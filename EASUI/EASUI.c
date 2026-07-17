@@ -2,14 +2,28 @@
 
 
 
-int EASUI_INIT()
+void LOG_EASUI_ERROR(const char* MESSAGE)
+{
+
+        fprintf(stderr, "[EASUI ERROR] : | %s | [LINE] : %d\n ", MESSAGE, __LINE__);
+
+}
+
+
+int EASUI_INIT(const unsigned short MAX_WINDOW_COUNT)
 {
 
         INIT_MEMORY_AREMA(1024);
 
 
+        EASUI__SETUP_WINDOW_LIST(MAX_WINDOW_COUNT);
+
+
         if (!SDL_Init(SDL_INIT_VIDEO))
         {
+
+                LOG_EASUI_ERROR("FAILED TO INITIALIZE SDL VIDIEO");
+
 
                 return EASUI_ERROR;
 
