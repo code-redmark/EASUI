@@ -5,10 +5,20 @@
 
 
 
+
+
 void LOG_EASUI_ERROR(const char* MESSAGE)
 {
 
-        fprintf(stderr, "[EASUI ERROR] : | %s | [LINE] : %d\n ", MESSAGE, __LINE__);
+        fprintf(stderr, "\033[1;31m[EASUI ERROR]\033[0m : | %s |\n", MESSAGE);
+
+}
+
+
+void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE)
+{
+
+        fprintf(stderr, "\033[1;31m[EASUI *CRITICAL* ERROR]\033[0m : | %s |\n", MESSAGE);
 
 }
 
@@ -36,7 +46,7 @@ int EASUI_INIT(const unsigned short MAX_WINDOW_COUNT)
                 if (!SDL_Init(SDL_INIT_VIDEO))
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO INITIALIZE SDL VIDIEO");
+                        LOG_EASUI_CRITICAL_ERROR("FAILED TO INITIALIZE SDL VIDIEO");
 
 
                         return EASUI_ERROR;
@@ -91,7 +101,18 @@ int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT)
 int EASUI_WAIT_AND_END()
 {
 
-        EASUI__WINDOW_MANAGER_WAIT_AND_END();
+        const int WINDOW_MANAGER_END_STATUS = EASUI__WINDOW_MANAGER_WAIT_AND_END();
+
+
+        if (WINDOW_MANAGER_END_STATUS == EASUI_ERROR)
+        {
+
+                LOG_EASUI_CRITICAL_ERROR("FAILED TO END EASUI : DUE TO THE PREVIOUS ERROR");
+
+
+                return EASUI_ERROR;
+
+        }
 
 
         FREE_MEMORY_ARENA();

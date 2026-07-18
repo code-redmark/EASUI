@@ -1,33 +1,39 @@
 #include "../../EASUI/EASUI.h"
-
+#include <stdio.h>
 
 
 
 int main()
 {
 
-        EASUI_WINDOW WINDOW_1, WINDOW_2;
+        EASUI_INIT(5);
 
 
-
-        EASUI_INIT(3);
-
-
-        // [RUN PART]
-        {
-
-                SET_NEW_EASUI_WINDOW(&WINDOW_1, "WINDOW 1", 16, 1080, 720);
-                SET_NEW_EASUI_WINDOW(&WINDOW_2, "WINDOW ", 16, 800, 600);
+        EASUI_WINDOW WINDOW_1, WINDOW_2, WINDOW_3, WINDOW_4, WINDOW_5;
+        EASUI_LABEL LABEL_1;
 
 
-                WINDOW_1.START(&WINDOW_1);
-                WINDOW_2.START(&WINDOW_2);
+        SET_NEW_EASUI_WINDOW(&WINDOW_1, "HELLO", 8, 800, 800, FALSE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_2, "BYEBYE", 8, 600, 600, TRUE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_3, "HELLO", 8, 800, 800, TRUE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_4, "BYEBYE", 8, 600, 600, TRUE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_5, "HELLO", 8, 800, 800, TRUE);
 
-        }
+
+        SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, 0, 0, 30, 30, 9, 1024);
+
+
+        WINDOW_1.START(&WINDOW_1);
+        WINDOW_2.START(&WINDOW_2);
+        WINDOW_3.START(&WINDOW_3);
+        WINDOW_4.START(&WINDOW_4);
+        WINDOW_5.START(&WINDOW_5);
 
 
         EASUI_WAIT_AND_END();
 
+
+        printf("EASUI ENDED PERFECTLY, THAT MEANS IT HAS A WORKING WINDOW MANAGER\n");
 
 
         return 0;

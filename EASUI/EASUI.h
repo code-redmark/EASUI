@@ -9,6 +9,7 @@
 #include <pthread.h>
 
 
+#define EASUI_NONE 0
 #define EASUI_ERROR 0
 #define EASUI_OK 1
 
@@ -17,7 +18,7 @@
 enum EASUI_ELEMENT_TYPE_NUMBERS
 {
 
-        EASUI_WINDOW_NUMBER,
+        EASUI_WINDOW_NUMBER = 1,
         EASUI_SCREEN_NUMBER,
         EASUI_TEXTBOX_NUMBER,
         EASUI_LABEL_NUMBER
@@ -27,7 +28,7 @@ enum EASUI_ELEMENT_TYPE_NUMBERS
 enum EASUI_WINDOW_STATUS_NUMBERS
 {
 
-        EASUI_WINDOW_UNINITIALIZED,
+        EASUI_WINDOW_UNINITIALIZED = 1,
         EASUI_WINDOW_READY,
         EASUI_WINDOW_RUNNNING,
         EASUI_WINDOW_CLOSED,
@@ -37,7 +38,7 @@ enum EASUI_WINDOW_STATUS_NUMBERS
 enum EASUI_WINDOW_EVENT_NUMBERS
 {
 
-        EASUI_NO_WINDOW_EVENT,
+        EASUI_NO_WINDOW_EVENT = 1,
         EASUI_CLOSE_WINDOW_EVENT,
 
 };
@@ -75,6 +76,9 @@ int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT);
 
 
 void LOG_EASUI_ERROR(const char* MESSAGE);
+
+
+void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 
 //
 // ================================================================================================================
@@ -114,6 +118,7 @@ void LOG_EASUI_ERROR(const char* MESSAGE);
                 EASUI_SCREEN* ACTIVE_SCREEN;
                 EASUI_SCREEN DEFAULT_SCREEN;
                 unsigned int WIDTH, HEIGHT;
+                int RESIZABLE;
                 int (*ADD_ELEMENT)(EASUI_WINDOW* WINDOW, void* ELEMENT);
                 int (*START)(EASUI_WINDOW* WINDOW);
                 char* TITLE;
@@ -121,7 +126,7 @@ void LOG_EASUI_ERROR(const char* MESSAGE);
         };
 
 
-        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT);
+        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT, const int RESIZABLE);
 
 // =============================================================================================================
 
@@ -144,7 +149,7 @@ void LOG_EASUI_ERROR(const char* MESSAGE);
         };
 
 
-        int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* FRAMED_HOLDER, const unsigned int X_POSITION, const unsigned int Y_POSITION, const unsigned int WIDTH, const unsigned int HEIGHT, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE);
+        int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const unsigned int X_POSITION, const unsigned int Y_POSITION, const unsigned int WIDTH, const unsigned int HEIGHT, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE);
 
 // ===============================================================================================================
 

@@ -1,4 +1,6 @@
 #include "MEMORY_ARENA_PRIVATE.h"
+#include <stddef.h>
+#include <stdlib.h>
 
 
 
@@ -45,8 +47,19 @@ void* MEMORY_ARENA_ALLOC(size_t SIZE)
                 }
 
                 // Allocate block metadata and the memory payload together in one shot
-                MARENA_BLOCK* NEW_BLOCK = (MARENA_BLOCK*)malloc(sizeof(MARENA_BLOCK) + BLOCK_SIZE);
+                const size_t MALLOC_SIZE = sizeof(MARENA_BLOCK) + BLOCK_SIZE;
+
+                MARENA_BLOCK* NEW_BLOCK = (MARENA_BLOCK*)malloc(MALLOC_SIZE);
+
                 if (!NEW_BLOCK) return NULL;
+
+                // Make all to zero
+                for (size_t INDEX = 0; INDEX < sizeof(MARENA_BLOCK) + BLOCK_SIZE; INDEX ++)
+                {
+
+                        ((char*)NEW_BLOCK)[INDEX] = 0;
+
+                }
 
                 NEW_BLOCK->CAPACITY = BLOCK_SIZE;
                 NEW_BLOCK->OFFSET = 0;

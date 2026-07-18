@@ -8,7 +8,7 @@ void TEST_FUNCTION(const EASUI_LABEL* LABEL);
 
 
 
-int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* FRAMED_HOLDER, const unsigned int X_POSITION, const unsigned int Y_POSITION, const unsigned int WIDTH, const unsigned int HEIGHT, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE)
+int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const unsigned int X_POSITION, const unsigned int Y_POSITION, const unsigned int WIDTH, const unsigned int HEIGHT, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE)
 {
 
         // [SET GIVEN VALUES AND FUNCTIONS]
@@ -26,7 +26,7 @@ int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* FRAMED_HOLDER, const unsigned 
         }
 
 
-        if (LABEL == NULL || FRAMED_HOLDER == NULL)
+        if (LABEL == NULL)
         {
 
                 return EASUI_ERROR;
@@ -34,7 +34,12 @@ int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* FRAMED_HOLDER, const unsigned 
         }
 
 
-        ADD__ELEMENT__TO__FRAMED_ELEMENT(FRAMED_HOLDER, LABEL);
+        if (OPTIONAL__FRAMED_HOLDER != NULL)
+        {
+
+                ADD__ELEMENT__TO__FRAMED_ELEMENT(OPTIONAL__FRAMED_HOLDER, LABEL);
+
+        }
 
 
         // [ALLOCATE MEMORY FOR THE TEXT]

@@ -1,4 +1,5 @@
 #include "../../EASUI.h"
+#include <SDL3/SDL_video.h>
 
 
 
@@ -11,7 +12,7 @@ int START(EASUI_WINDOW* WINDOW);
 
 
 
-int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT)
+int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT, const int RESIZABLE)
 {
 
         // [CHECK FOR NULL POINTERS]
@@ -37,6 +38,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 WINDOW->STATUS = EASUI_WINDOW_UNINITIALIZED;
                 WINDOW->WIDTH = WIDTH;
                 WINDOW->HEIGHT = HEIGHT;
+                WINDOW->RESIZABLE = RESIZABLE;
                 WINDOW->ACTIVE_SCREEN = &WINDOW->DEFAULT_SCREEN;
                 WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
                 WINDOW->START = START;
@@ -115,49 +117,86 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
 int START(EASUI_WINDOW* WINDOW)
 {
 
+        if (WINDOW->STATUS == EASUI_WINDOW_UNINITIALIZED)
+        {
+
+                LOG_EASUI_ERROR("FAILED TO START WINDOW : WINDOW WAS NOT INITIALIZED");
+
+
+                return EASUI_ERROR;
+
+        }
+
+
         // [CREATE WINDOW AND CONTEXT]
         {
 
-                WINDOW->SDL_WINDOW = SDL_CreateWindow(WINDOW->TITLE, WINDOW->WIDTH, WINDOW->HEIGHT, SDL_WINDOW_OPENGL);
+                int SDL_WINDOW_FLAGS = SDL_WINDOW_OPENGL;
 
 
-                if (!WINDOW->SDL_WINDOW)
+                // [SET SDL WINDOW FLAGS]
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL WINDOW");
+                        if (WINDOW->RESIZABLE)
+                        {
 
+                                SDL_WINDOW_FLAGS |= SDL_WINDOW_RESIZABLE;
 
-                        return EASUI_ERROR;
+                        }
 
                 }
 
 
-                SDL_ShowWindow(WINDOW->SDL_WINDOW);
-
-
-                WINDOW->SDL_CONTEXT = SDL_GL_CreateContext(WINDOW->SDL_WINDOW);
-
-
-                if (!WINDOW->SDL_CONTEXT)
+                // [CREATE WINDOW]
                 {
 
-                        SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                        WINDOW->SDL_WINDOW = SDL_CreateWindow(WINDOW->TITLE, WINDOW->WIDTH, WINDOW->HEIGHT, SDL_WINDOW_FLAGS);
 
 
-                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL CONTEXT");
+                        if (!WINDOW->SDL_WINDOW)
+                        {
+
+                                LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL WINDOW");
 
 
-                        return EASUI_ERROR;
+                                return EASUI_ERROR;
+
+                        }
+
                 }
 
 
-                SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, WINDOW->SDL_CONTEXT);
+                // [CREATE OPENGL CONTEXT]
+                {
+
+                        WINDOW->SDL_CONTEXT = SDL_GL_CreateContext(WINDOW->SDL_WINDOW);
+
+
+                        if (!WINDOW->SDL_CONTEXT)
+                        {
+
+                                SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+
+
+                                LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL CONTEXT");
+
+
+                                return EASUI_ERROR;
+                        }
+
+
+                        SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, WINDOW->SDL_CONTEXT);
+
+                }
 
 
                 if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
                 {
 
                         SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+
+
+                        SDL_GL_DestroyContext(WINDOW->SDL_CONTEXT);
 
 
                         LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO LOAD GLAD");
@@ -186,6 +225,17 @@ int START(EASUI_WINDOW* WINDOW)
 
 int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
 {
+
+        if (WINDOW->STATUS == EASUI_NONE || WINDOW->STATUS == EASUI_WINDOW_UNINITIALIZED)
+        {
+
+                LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO WINDOW : WINDOW WAS NOT INITIALIZED");
+
+
+                return EASUI_ERROR;
+
+        }
+
 
         int ADD_ELEMENT_STATUS = (WINDOW->DEFAULT_SCREEN).ADD_ELEMENT(&WINDOW->DEFAULT_SCREEN, ELEMENT);
 
