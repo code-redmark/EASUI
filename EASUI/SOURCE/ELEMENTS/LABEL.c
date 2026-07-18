@@ -29,6 +29,9 @@ int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const
         if (LABEL == NULL)
         {
 
+                LOG_EASUI_ERROR("FAILED TO ADD NEW EASUI LABEL : LABEL IS NULL");
+
+
                 return EASUI_ERROR;
 
         }

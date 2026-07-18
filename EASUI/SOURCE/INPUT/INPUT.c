@@ -20,6 +20,16 @@ int EASUI__POLL_EVENTS()
 
                 }
 
+                if (SDL_EVENT.type == SDL_EVENT_WINDOW_RESIZED)
+                {
+
+                        EASUI_WINDOW* FOCUSED_WINDOW = GET_FOCUSED_WINDOW();
+
+
+                        FOCUSED_WINDOW->UPDATE_CONTEXT_SIZE(FOCUSED_WINDOW);
+
+                }
+
         }
 
 

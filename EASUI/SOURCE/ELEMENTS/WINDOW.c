@@ -10,6 +10,9 @@ int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT);
 int START(EASUI_WINDOW* WINDOW);
 
 
+void UPDATE_CONTEXT_SIZE(EASUI_WINDOW* WINDOW);
+
+
 
 
 int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT, const int RESIZABLE)
@@ -42,6 +45,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 WINDOW->ACTIVE_SCREEN = &WINDOW->DEFAULT_SCREEN;
                 WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
                 WINDOW->START = START;
+                WINDOW->UPDATE_CONTEXT_SIZE = UPDATE_CONTEXT_SIZE;
 
         }
 
@@ -219,6 +223,46 @@ int START(EASUI_WINDOW* WINDOW)
 
 
         return EASUI_OK;
+
+}
+
+
+void UPDATE_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
+{
+
+        int NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT;
+
+
+        if (WINDOW == NULL)
+        {
+
+                LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : WINDOW IS NULL");
+
+
+                return;
+
+        }
+
+
+        const int GET_WINDOW_SIZE_STATUS = SDL_GetWindowSizeInPixels(WINDOW->SDL_WINDOW, &NEW_WINDOW_WIDTH, &NEW_WINDOW_HEIGHT);
+
+
+        if (!GET_WINDOW_SIZE_STATUS)
+        {
+
+                LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : SDL FAILED TO GET WINDOW SIZE");
+
+
+                return;
+
+        }
+
+
+        WINDOW->WIDTH = NEW_WINDOW_WIDTH;
+        WINDOW->HEIGHT = NEW_WINDOW_HEIGHT;
+
+
+        glViewport(0, 0, NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT);
 
 }
 
