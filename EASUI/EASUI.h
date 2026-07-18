@@ -2,7 +2,7 @@
 #ifdef EASUI
 
 
-#include "SOURCE/MEMORY_ARENA/PRIVATE_MEMORY_ARENA.h"
+#include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include "DEPENDENCIES/GLAD/include/glad/glad.h"
 #include <SDL3/SDL.h>

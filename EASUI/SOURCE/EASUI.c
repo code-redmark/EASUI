@@ -1,5 +1,7 @@
 #include "../EASUI.h"
 #include <SDL3/SDL_init.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 
@@ -14,28 +16,40 @@ void LOG_EASUI_ERROR(const char* MESSAGE)
 int EASUI_INIT(const unsigned short MAX_WINDOW_COUNT)
 {
 
-        INIT_MEMORY_AREMA(1024);
-
-
-        EASUI__SETUP_WINDOW_LIST(MAX_WINDOW_COUNT);
-
-
-        // !-- TODO : FIX POLL EVENTS NOT WORKING ISSUE --!
-        if (!SDL_Init(SDL_INIT_VIDEO))
+        // [SETUP SDL]
         {
 
-                LOG_EASUI_ERROR("FAILED TO INITIALIZE SDL VIDIEO");
+                SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+                SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+                SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 
-                return EASUI_ERROR;
+                #ifdef __linux__
+
+                        SDL_SetHint(SDL_HINT_VIDEO_DRIVER, getenv("XDG_SESSION_TYPE"));
+
+                #endif
+
+
+                if (!SDL_Init(SDL_INIT_VIDEO))
+                {
+
+                        LOG_EASUI_ERROR("FAILED TO INITIALIZE SDL VIDIEO");
+
+
+                        return EASUI_ERROR;
+
+                }
 
         }
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+        INIT_MEMORY_ARENA(1024);
+
+
+        EASUI__SETUP_WINDOW_LIST(MAX_WINDOW_COUNT);
 
 
         EASUI__WINDOW_MANAGER_START();

@@ -13,7 +13,7 @@ int EASUI__POLL_EVENTS()
         while (SDL_PollEvent(&SDL_EVENT) != 0)
         {
 
-                if (SDL_EVENT.type == SDL_EVENT_QUIT)
+                if (SDL_EVENT.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
                 {
 
                         return EASUI_CLOSE_WINDOW_EVENT;

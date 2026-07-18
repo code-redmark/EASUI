@@ -1,4 +1,4 @@
-#include "PRIVATE_MEMORY_ARENA.h"
+#include "MEMORY_ARENA_PRIVATE.h"
 
 
 
@@ -7,7 +7,7 @@ MARENA PROGRAM_ARENA;
 
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! AI WRITEN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-void INIT_MEMORY_AREMA(size_t DEFAULT_SIZE)
+void INIT_MEMORY_ARENA(size_t DEFAULT_SIZE)
 {
 
         PROGRAM_ARENA.HEAD = NULL;

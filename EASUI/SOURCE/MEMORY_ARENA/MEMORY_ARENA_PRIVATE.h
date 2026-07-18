@@ -35,7 +35,7 @@ MARENA;
 
 
 
-void INIT_MEMORY_AREMA(size_t DEFAULT_SIZE);
+void INIT_MEMORY_ARENA(size_t DEFAULT_SIZE);
 
 
 void* MEMORY_ARENA_ALLOC(size_t SIZE);
