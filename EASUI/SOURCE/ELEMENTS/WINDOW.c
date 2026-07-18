@@ -227,6 +227,36 @@ int START(EASUI_WINDOW* WINDOW)
 }
 
 
+int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
+{
+
+        if (WINDOW->STATUS == EASUI_NONE || WINDOW->STATUS == EASUI_WINDOW_UNINITIALIZED)
+        {
+
+                LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO WINDOW : WINDOW WAS NOT INITIALIZED");
+
+
+                return EASUI_ERROR;
+
+        }
+
+
+        int ADD_ELEMENT_STATUS = (WINDOW->DEFAULT_SCREEN).ADD_ELEMENT(&WINDOW->DEFAULT_SCREEN, ELEMENT);
+
+
+        if (ADD_ELEMENT_STATUS == EASUI_ERROR)
+        {
+
+                return EASUI_ERROR;
+
+        }
+
+
+        return EASUI_OK;
+
+}
+
+
 void UPDATE_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
 {
 
@@ -262,36 +292,7 @@ void UPDATE_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         WINDOW->HEIGHT = NEW_WINDOW_HEIGHT;
 
 
+        SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
         glViewport(0, 0, NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT);
-
-}
-
-
-int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
-{
-
-        if (WINDOW->STATUS == EASUI_NONE || WINDOW->STATUS == EASUI_WINDOW_UNINITIALIZED)
-        {
-
-                LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO WINDOW : WINDOW WAS NOT INITIALIZED");
-
-
-                return EASUI_ERROR;
-
-        }
-
-
-        int ADD_ELEMENT_STATUS = (WINDOW->DEFAULT_SCREEN).ADD_ELEMENT(&WINDOW->DEFAULT_SCREEN, ELEMENT);
-
-
-        if (ADD_ELEMENT_STATUS == EASUI_ERROR)
-        {
-
-                return EASUI_ERROR;
-
-        }
-
-
-        return EASUI_OK;
 
 }
