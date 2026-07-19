@@ -159,7 +159,7 @@ void* WINDOW_MANAGER_MAIN(void* ARG)
         while (!NO_WINDOWS_RUNNING())
         {
 
-                int WINDOW_EVENT = EASUI__POLL_EVENTS();
+                int WINDOW_EVENT = EASUI__GET_EVENTS();
 
 
                 EASUI_WINDOW* CURRENT_WINDOW = GET_FOCUSED_WINDOW();
