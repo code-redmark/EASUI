@@ -26,13 +26,12 @@ FetchContent_MakeAvailable(SDL3)
 # === === ===
 
 
-
 # === LIBRARY SETUP ===
 
-file(GLOB_RECURSE LIB_CODE "EASUI/*.c" "EASUI/*.cpp")
+file(GLOB_RECURSE LIB_CODE "${CMAKE_CURRENT_SOURCE_DIR}/SOURCE/*.c" "${CMAKE_CURRENT_SOURCE_DIR}/SOURCE/*.cpp")
 
-file(GLOB_RECURSE PRIV_HEAD "EASUI/PRIVATE_*.h")
-file(GLOB_RECURSE PUB_HEAD "EASUI/*.h")
+file(GLOB_RECURSE PRIV_HEAD "${CMAKE_CURRENT_SOURCE_DIR}/PRIVATE_*.h")
+file(GLOB_RECURSE PUB_HEAD "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 
 add_library(EASUI STATIC
@@ -41,27 +40,18 @@ add_library(EASUI STATIC
     ${PRIV_HEAD}
 )
 
-
 target_include_directories(EASUI PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Define SDL_STATIC for your code
-target_compile_definitions(EASUI PRIVATE SDL_STATIC)
-
-# Link SDL3 (automatically handles include paths and libraries!)
-target_link_libraries(EASUI PRIVATE SDL3::SDL3)
-
-
-
 # -- Glad setup
 
 add_library(glad STATIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/EASUI/DEPENDENCIES/glad/src/glad.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/DEPENDENCIES/GLAD/src/glad.c
 )
 
 target_include_directories(glad PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/EASUI/DEPENDENCIES/glad/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/DEPENDENCIES/GLAD/include
 )
 
 # -- --
