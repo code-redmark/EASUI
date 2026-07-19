@@ -6,7 +6,11 @@
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include "DEPENDENCIES/GLAD/include/glad/glad.h"
 #include <SDL3/SDL.h>
-#include <pthread.h>
+#include <stdio.h>
+
+
+#define EASUI__DEFAULT__REFRESH_RATE 60
+#define EASUI__DEFAULT__MEMORY_ARENA_SIZE 1024
 
 
 #define EASUI_NONE 0
@@ -54,16 +58,16 @@ typedef struct EASUI_WINDOW EASUI_WINDOW;
 int EASUI_INIT(const unsigned short MAX_WINDOW_COUNT);
 
 
+int EASUI__RUN();
+
+
 int EASUI_WAIT_AND_END();
 
 
-int EASUI__SETUP_WINDOW_LIST(const unsigned short MAX_WINDOW_COUNT);
+int EASUI__WINDOW_MANAGER__INIT(const unsigned short MAX_WINDOW_COUNT);
 
 
-int EASUI__WINDOW_MANAGER_START();
-
-
-int EASUI__WINDOW_MANAGER_WAIT_AND_END();
+int EASUI__WINDOW_MANAGER__RUN();
 
 
 int EASUI__ADD_WINDOW_TO_WINDOW_LIST(EASUI_WINDOW* WINDOW);

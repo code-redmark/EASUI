@@ -1,5 +1,5 @@
 #include "../../EASUI/EASUI.h"
-#include <stdio.h>
+
 
 
 
@@ -30,7 +30,7 @@ int main()
         WINDOW_5.START(&WINDOW_5);
 
 
-        EASUI_WAIT_AND_END();
+        EASUI__RUN();
 
 
         printf("EASUI ENDED PERFECTLY, THAT MEANS IT HAS A WORKING WINDOW MANAGER\n");

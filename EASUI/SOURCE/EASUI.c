@@ -1,26 +1,7 @@
 #include "../EASUI.h"
-#include <SDL3/SDL_init.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 
 
-
-
-void LOG_EASUI_ERROR(const char* MESSAGE)
-{
-
-        fprintf(stderr, "\033[1;31m[EASUI ERROR]\033[0m : | %s |\n", MESSAGE);
-
-}
-
-
-void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE)
-{
-
-        fprintf(stderr, "\033[1;31m[EASUI *CRITICAL* ERROR]\033[0m : | %s |\n", MESSAGE);
-
-}
 
 
 int EASUI_INIT(const unsigned short MAX_WINDOW_COUNT)
@@ -59,10 +40,37 @@ int EASUI_INIT(const unsigned short MAX_WINDOW_COUNT)
         INIT_MEMORY_ARENA(1024);
 
 
-        EASUI__SETUP_WINDOW_LIST(MAX_WINDOW_COUNT);
+        EASUI__WINDOW_MANAGER__INIT(MAX_WINDOW_COUNT);
 
 
-        EASUI__WINDOW_MANAGER_START();
+        return EASUI_OK;
+
+}
+
+
+int EASUI__RUN()
+{
+
+        int WINDOW_MANAGER_RUN_STATUS = EASUI__WINDOW_MANAGER__RUN();
+
+
+        // [END EASUI]
+        {
+
+                SDL_Quit();
+
+
+                FREE_MEMORY_ARENA();
+
+        }
+
+
+        if (WINDOW_MANAGER_RUN_STATUS == EASUI_OK)
+        {
+
+                return EASUI_ERROR;
+
+        }
 
 
         return EASUI_OK;
@@ -98,29 +106,17 @@ int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT)
 }
 
 
-int EASUI_WAIT_AND_END()
+void LOG_EASUI_ERROR(const char* MESSAGE)
 {
 
-        const int WINDOW_MANAGER_END_STATUS = EASUI__WINDOW_MANAGER_WAIT_AND_END();
+        fprintf(stderr, "\033[1;31m[EASUI ERROR]\033[0m : | %s |\n", MESSAGE);
+
+}
 
 
-        if (WINDOW_MANAGER_END_STATUS == EASUI_ERROR)
-        {
+void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE)
+{
 
-                LOG_EASUI_CRITICAL_ERROR("FAILED TO END EASUI : DUE TO THE PREVIOUS ERROR");
-
-
-                return EASUI_ERROR;
-
-        }
-
-
-        FREE_MEMORY_ARENA();
-
-
-        SDL_Quit();
-
-
-        return EASUI_OK;
+        fprintf(stderr, "\033[1;31m[EASUI *CRITICAL* ERROR]\033[0m : | %s |\n", MESSAGE);
 
 }
