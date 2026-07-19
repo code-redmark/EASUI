@@ -56,12 +56,25 @@ target_include_directories(glad PUBLIC
 
 # -- --
 
+# -- COMMON setup
+
+add_library(COMMON STATIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/DEPENDENCIES/COMMON/STRINGS.c
+)
+
+target_include_directories(COMMON PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/DEPENDENCIES/include
+)
+
+# --
+
 # -- Link Depndendencies
 
 target_compile_definitions(EASUI PRIVATE SDL_STATIC)
 target_link_libraries(EASUI PUBLIC
     glad
     SDL3::SDL3-static
+    COMMON
 )
 
 # === === ===

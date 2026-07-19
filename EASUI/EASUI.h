@@ -3,8 +3,9 @@
 
 
 #include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
-#include "DEPENDENCIES/COMMON/STRINGS.h"
+
 #include "DEPENDENCIES/GLAD/include/glad/glad.h"
+#include "DEPENDENCIES/COMMON/STRINGS.h"
 #include <SDL3/SDL.h>
 #include <stdio.h>
 
@@ -16,8 +17,6 @@
 #define EASUI_NONE 0
 #define EASUI_ERROR 0
 #define EASUI_OK 1
-
-
 
 enum EASUI_ELEMENT_TYPE_NUMBERS
 {

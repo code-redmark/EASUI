@@ -8,7 +8,7 @@ EASUI_WINDOW* ACTIVE_WINDOW;
 
 unsigned short LAST_WINDOW_INDEX;
 unsigned short MAX_WINDOW_COUNT;
-unsigned short FRAMETIME_MILISECONDS;
+unsigned short FRAMETIME_MILLISECONDS;
 
 
 
@@ -42,9 +42,9 @@ int EASUI__WINDOW_MANAGER__INIT(const unsigned short WINDOW_COUNT)
         {
 
                 MAX_WINDOW_COUNT = WINDOW_COUNT;
-
-
                 LAST_WINDOW_INDEX = 0;
+                
+                SET_FRAMETIME();
 
         }
 
@@ -82,9 +82,7 @@ int EASUI__WINDOW_MANAGER__RUN()
         // [WAIT FOR A WINDOW TO BE RUNNING]
         {
 
-                while (WINDOW_LIST[0] == NULL);
-
-
+                while (WINDOW_LIST[0] == NULL)
                 while (NO_WINDOWS_RUNNING());
 
         }
@@ -101,51 +99,44 @@ int EASUI__WINDOW_MANAGER__RUN()
 
                 if (CURRENT_WINDOW == NULL)
                 {
-
-                        continue;
-
+                    continue;
                 }
 
 
                 if (WINDOW_EVENT == EASUI_CLOSE_WINDOW_EVENT)
                 {
 
-                        SDL_GL_DestroyContext(CURRENT_WINDOW->SDL_CONTEXT);
+                    SDL_GL_DestroyContext(CURRENT_WINDOW->SDL_CONTEXT);
+                    SDL_DestroyWindow(CURRENT_WINDOW->SDL_WINDOW);
 
-
-                        SDL_DestroyWindow(CURRENT_WINDOW->SDL_WINDOW);
-
-
-                        CURRENT_WINDOW->STATUS = EASUI_WINDOW_CLOSED;
+                    CURRENT_WINDOW->STATUS = EASUI_WINDOW_CLOSED;
 
                 }
 
-
+                
                 // ==============! TEMPORARY !==============
                 for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX++)
                 {
+                        
+                        EASUI_WINDOW* WIN = WINDOW_LIST[INDEX];
+                        SDL_GL_MakeCurrent(WIN, WIN->SDL_CONTEXT);
 
-                        EASUI_WINDOW* CURRENT_WINDOW = WINDOW_LIST[INDEX];
-
-
-                        if (CURRENT_WINDOW->STATUS == EASUI_WINDOW_RUNNNING)
+                        if (WIN->STATUS == EASUI_WINDOW_RUNNNING)
                         {
 
-                                CURRENT_WINDOW->UPDATE_CONTEXT_SIZE(CURRENT_WINDOW);
-
+                                WIN->UPDATE_CONTEXT_SIZE(WIN);
 
                                 glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-                                glClear(GL_COLOR_BUFFER_BIT);
+                                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-                                SDL_GL_SwapWindow(CURRENT_WINDOW->SDL_WINDOW);
+                                SDL_GL_SwapWindow(WIN->SDL_WINDOW);
 
                         }
 
                 }
 
 
-                SDL_Delay(FRAMETIME_MILISECONDS);
+                SDL_Delay(FRAMETIME_MILLISECONDS);
 
         }
 
@@ -346,9 +337,9 @@ void SET_FRAMETIME()
 
         SET_FRAMETIME:
         {
-
-                FRAMETIME_MILISECONDS = 1000 / REFRESH_RATE;
-
+                
+                FRAMETIME_MILLISECONDS = 1000 / REFRESH_RATE;
+                
         }
-
+        
 }

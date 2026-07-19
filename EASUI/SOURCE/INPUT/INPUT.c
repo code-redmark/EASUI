@@ -9,8 +9,8 @@ int EASUI__GET_EVENTS()
 
         SDL_Event SDL_EVENT;
 
-
-        while (SDL_WaitEvent(&SDL_EVENT) != 0)
+        
+        while (SDL_PollEvent(&SDL_EVENT) != 0)
         {
 
                 if (SDL_EVENT.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)

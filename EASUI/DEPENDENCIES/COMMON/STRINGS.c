@@ -2,11 +2,6 @@
 
 
 
-
-
-
-
-
 /**
  * - BRIEF  : TURNS A SINGLE LETTERED STRING INTO A CHAR
  *
