@@ -1,7 +1,4 @@
 #include "../../EASUI.h"
-#include <SDL3/SDL_timer.h>
-#include <SDL3/SDL_video.h>
-#include <time.h>
 
 
 
@@ -14,14 +11,6 @@ unsigned short MAX_WINDOW_COUNT;
 unsigned short FRAMETIME_MILISECONDS;
 
 
-pthread_t WINDOW_MANAGER_MAIN__THREAD;
-
-
-
-void* WINDOW_MANAGER_MAIN(void* ARG);
-
-
-EASUI_WINDOW* GET__WINDOW__FROM__SDL_WINDOW(const SDL_Window* SDL_WINDOW);
 
 
 EASUI_WINDOW* GET_FOCUSED_WINDOW();
@@ -30,21 +19,18 @@ EASUI_WINDOW* GET_FOCUSED_WINDOW();
 int NO_WINDOWS_RUNNING();
 
 
-int SET_FRAMETIME();
+void SET_FRAMETIME();
 
 
 
 
-int EASUI__SETUP_WINDOW_LIST(const unsigned short WINDOW_COUNT)
+int EASUI__WINDOW_MANAGER__INIT(const unsigned short WINDOW_COUNT)
 {
 
         if (WINDOW_COUNT == 0)
         {
 
-                LOG_EASUI_CRITICAL_ERROR("FAILED TO SETUP WINDOW LIST : WINDOW COUNT MUST BE ATLEAST 1");
-
-
-                EASUI_WAIT_AND_END();
+                LOG_EASUI_CRITICAL_ERROR("FAILED TO INITIALIZE WINDOW MANAGER : WINDOW COUNT MUST BE ATLEAST 1");
 
 
                 return EASUI_ERROR;
@@ -52,87 +38,35 @@ int EASUI__SETUP_WINDOW_LIST(const unsigned short WINDOW_COUNT)
         }
 
 
-        MAX_WINDOW_COUNT = WINDOW_COUNT;
-
-
-        LAST_WINDOW_INDEX = 0;
-
-
-        WINDOW_LIST = MEMORY_ARENA_ALLOC(sizeof(EASUI_WINDOW*) * WINDOW_COUNT);
-
-
-        if (WINDOW_LIST == NULL)
+        // [SET DATA]
         {
 
-                LOG_EASUI_CRITICAL_ERROR("FAILED TO SETUP WINDOW LIST : FAILED TO ALLOCATE MEMORY FOR WINDOW LIST");
+                MAX_WINDOW_COUNT = WINDOW_COUNT;
 
 
-                return EASUI_ERROR;
+                LAST_WINDOW_INDEX = 0;
 
         }
 
 
-        WINDOW_LIST[0] = NULL;
-
-
-        return EASUI_OK;
-
-}
-
-
-int EASUI__WINDOW_MANAGER_START()
-{
-
-        // [SET FRAMETIME]
+        // [INITIALIZE WINDOW LIST]
         {
 
-                int SET_FRAMETIME_STATUS = SET_FRAMETIME();
+                WINDOW_LIST = MEMORY_ARENA_ALLOC(sizeof(EASUI_WINDOW*) * WINDOW_COUNT);
 
 
-                if (SET_FRAMETIME_STATUS == EASUI_ERROR)
+                if (WINDOW_LIST == NULL)
                 {
 
-                        return EASUI_ERROR;
-
-                }
-
-        }
-
-
-        // [START MAIN THREAD]
-        {
-
-                const int CREATE_THREAD_STATUS = pthread_create(&WINDOW_MANAGER_MAIN__THREAD, NULL, WINDOW_MANAGER_MAIN, NULL);
-
-
-                if (CREATE_THREAD_STATUS != 0)
-                {
-
-                        LOG_EASUI_ERROR("FAILED TO START WINDOW MANAGER : FAILED TO CREATE WINDOW MANAGER MAIN THREAD");
+                        LOG_EASUI_CRITICAL_ERROR("FAILED TO INITIALIZE WINDOW MANAGER : FAILED TO ALLOCATE MEMORY FOR WINDOW LIST");
 
 
                         return EASUI_ERROR;
 
                 }
 
-        }
 
-
-        return EASUI_OK;
-
-}
-
-
-int EASUI__WINDOW_MANAGER_WAIT_AND_END()
-{
-
-        if (pthread_join(WINDOW_MANAGER_MAIN__THREAD, NULL) != 0)
-        {
-
-                LOG_EASUI_CRITICAL_ERROR("FAILED TO WAIT AND END WINDOW MANAGER : FAILED TO JOIN WINDOW MANAGER MAIN THREAD");
-
-
-                return EASUI_ERROR;
+                WINDOW_LIST[0] = NULL;
 
         }
 
@@ -142,7 +76,7 @@ int EASUI__WINDOW_MANAGER_WAIT_AND_END()
 }
 
 
-void* WINDOW_MANAGER_MAIN(void* ARG)
+int EASUI__WINDOW_MANAGER__RUN()
 {
 
         // [WAIT FOR A WINDOW TO BE RUNNING]
@@ -200,7 +134,7 @@ void* WINDOW_MANAGER_MAIN(void* ARG)
                                 CURRENT_WINDOW->UPDATE_CONTEXT_SIZE(CURRENT_WINDOW);
 
 
-                                glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+                                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
                                 glClear(GL_COLOR_BUFFER_BIT);
 
 
@@ -216,7 +150,28 @@ void* WINDOW_MANAGER_MAIN(void* ARG)
         }
 
 
-        return NULL;
+        return EASUI_ERROR;
+
+}
+
+
+int NO_WINDOWS_RUNNING()
+{
+
+        for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX ++)
+        {
+
+                if (WINDOW_LIST[INDEX]->STATUS == EASUI_WINDOW_RUNNNING)
+                {
+
+                        return FALSE;
+
+                }
+
+        }
+
+
+        return TRUE;
 
 }
 
@@ -269,27 +224,6 @@ int EASUI__ADD_WINDOW_TO_WINDOW_LIST(EASUI_WINDOW* WINDOW)
 
 
         return EASUI_OK;
-
-}
-
-
-int NO_WINDOWS_RUNNING()
-{
-
-        for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX ++)
-        {
-
-                if (WINDOW_LIST[INDEX]->STATUS == EASUI_WINDOW_RUNNNING)
-                {
-
-                        return FALSE;
-
-                }
-
-        }
-
-
-        return TRUE;
 
 }
 
@@ -365,10 +299,13 @@ EASUI_WINDOW* GET__WINDOW__FROM__SDL_WINDOW(const SDL_Window* SDL_WINDOW)
 }
 
 
-int SET_FRAMETIME()
+void SET_FRAMETIME()
 {
 
         const SDL_DisplayMode* DISPLAY_MODE;
+
+        float REFRESH_RATE = EASUI__DEFAULT__REFRESH_RATE;
+
 
 
         // [GET DISPLAY MODE]
@@ -383,7 +320,8 @@ int SET_FRAMETIME()
                         LOG_EASUI_ERROR("FAILED TO SET FRAMETIME : DISPLAY ID IS 0");
 
 
-                        return EASUI_ERROR;
+                        goto SET_FRAMETIME;
+
                 }
 
 
@@ -396,16 +334,21 @@ int SET_FRAMETIME()
                         LOG_EASUI_ERROR("FAILED TO SET FRAMETIME : DISPLAY MODE IS NULL");
 
 
-                        return EASUI_ERROR;
+                        goto SET_FRAMETIME;
 
                 }
+
+
+                REFRESH_RATE = DISPLAY_MODE->refresh_rate;
 
         }
 
 
-        FRAMETIME_MILISECONDS = 1000 / DISPLAY_MODE->refresh_rate;
+        SET_FRAMETIME:
+        {
 
+                FRAMETIME_MILISECONDS = 1000 / REFRESH_RATE;
 
-        return EASUI_OK;
+        }
 
 }
