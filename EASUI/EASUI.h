@@ -132,7 +132,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 int RESIZABLE;
                 int (*ADD_ELEMENT)(EASUI_WINDOW* WINDOW, void* ELEMENT);
                 int (*START)(EASUI_WINDOW* WINDOW);
-                void(*UPDATE_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
+                void(*UPDATE_SIZE_AND_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
                 char* TITLE;
 
         };

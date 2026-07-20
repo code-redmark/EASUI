@@ -118,11 +118,17 @@ int EASUI__WINDOW_MANAGER__RUN()
 
                         CURRENT_WINDOW->STATUS = EASUI_WINDOW_CLOSED;
 
+
+                        continue;
+
                 }
 
 
                 // [RENDER CURRENT WINDOW]
                 {
+
+                        CURRENT_WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE(CURRENT_WINDOW);
+
 
                         EASUI__RENDER_WINDOW(CURRENT_WINDOW);
 
