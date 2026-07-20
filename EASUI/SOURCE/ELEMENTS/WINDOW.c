@@ -231,6 +231,9 @@ int START(EASUI_WINDOW* WINDOW)
 
                 WINDOW->STATUS = EASUI_WINDOW_RUNNNING;
 
+
+                EASUI__RENDER_WINDOW(WINDOW);
+
         }
 
 

@@ -121,29 +121,10 @@ int EASUI__WINDOW_MANAGER__RUN()
                 }
 
 
-                // ==============! TEMPORARY !==============
-                for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX++)
+                // [RENDER CURRENT WINDOW]
                 {
 
-                        EASUI_WINDOW* WIN = WINDOW_LIST[INDEX];
-
-
-                        SDL_GL_MakeCurrent(WIN->SDL_WINDOW, EASUI__SDL_CONTEXT);
-
-
-                        if (WIN->STATUS == EASUI_WINDOW_RUNNNING)
-                        {
-
-                                WIN->UPDATE_CONTEXT_SIZE(WIN);
-
-
-                                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-                                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-                                SDL_GL_SwapWindow(WIN->SDL_WINDOW);
-
-                        }
+                        EASUI__RENDER_WINDOW(CURRENT_WINDOW);
 
                 }
 
