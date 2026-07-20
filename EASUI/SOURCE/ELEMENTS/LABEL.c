@@ -8,17 +8,15 @@ void TEST_FUNCTION(const EASUI_LABEL* LABEL);
 
 
 
-int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const unsigned int X_POSITION, const unsigned int Y_POSITION, const unsigned int WIDTH, const unsigned int HEIGHT, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE)
+int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const EASUIvec2 POSITION, const EASUIvec2 SIZE, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE)
 {
 
         // [SET GIVEN VALUES AND FUNCTIONS]
         {
 
                 LABEL->TYPE = EASUI_LABEL_NUMBER;
-                LABEL->X_POSITION = X_POSITION;
-                LABEL->Y_POSITION = Y_POSITION;
-                LABEL->WIDTH = WIDTH;
-                LABEL->HEIGHT = HEIGHT;
+                LABEL->POSITION = POSITION;
+                LABEL->SIZE = SIZE;
                 LABEL->FONT_SIZE = FONT_SIZE;
                 LABEL->MAX_STRING_SIZE = MAX_STRING_SIZE;
                 LABEL->TEST_FUNCTION = TEST_FUNCTION;

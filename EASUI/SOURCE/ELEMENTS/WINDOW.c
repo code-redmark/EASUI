@@ -14,13 +14,13 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW);
 
 
 
-int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT, const int RESIZABLE)
+int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const EASUIvec2 SIZE, const int RESIZABLE)
 {
 
         // [CHECK FOR NULL POINTERS]
         {
 
-                if (WINDOW == NULL || TITLE == NULL)
+                if (WINDOW == NULL || TITLE == NULL || (SIZE.x <= 0 || SIZE.y <= 0))
                 {
 
                         LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : BAD_ARGUMENTS");
@@ -38,13 +38,13 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
 
                 WINDOW->TYPE = EASUI_WINDOW_NUMBER;
                 WINDOW->STATUS = EASUI_WINDOW_UNINITIALIZED;
-                WINDOW->WIDTH = WIDTH;
-                WINDOW->HEIGHT = HEIGHT;
+                WINDOW->SIZE = SIZE;
                 WINDOW->RESIZABLE = RESIZABLE;
                 WINDOW->ACTIVE_SCREEN = &WINDOW->DEFAULT_SCREEN;
                 WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
                 WINDOW->START = START;
                 WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE = UPDATE_SIZE_AND_CONTEXT_SIZE;
+                WINDOW->BG_COLOR = (EASUIvec3){.x = 1.0f, .y = 1.0f, .z = 1.0f }; // white
 
         }
 
@@ -153,7 +153,7 @@ int START(EASUI_WINDOW* WINDOW)
                 // [CREATE WINDOW]
                 {
 
-                        WINDOW->SDL_WINDOW = SDL_CreateWindow(WINDOW->TITLE, WINDOW->WIDTH, WINDOW->HEIGHT, SDL_WINDOW_FLAGS);
+                        WINDOW->SDL_WINDOW = SDL_CreateWindow(WINDOW->TITLE, WINDOW->SIZE.x, WINDOW->SIZE.y, SDL_WINDOW_FLAGS);
 
 
                         if (!WINDOW->SDL_WINDOW)
@@ -303,10 +303,15 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         }
 
 
-        WINDOW->WIDTH = NEW_WINDOW_WIDTH;
-        WINDOW->HEIGHT = NEW_WINDOW_HEIGHT;
+        WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
+        WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
 
 
         glViewport(0, 0, NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT);
 
+}
+
+int SET_EASUI_WINDOW_BG_COLOR(EASUI_WINDOW* WINDOW, EASUIvec3 BG_COLOR)
+{
+        WINDOW->BG_COLOR = BG_COLOR;
 }

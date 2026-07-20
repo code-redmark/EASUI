@@ -56,6 +56,20 @@ typedef struct EASUI_WINDOW EASUI_WINDOW;
 extern SDL_GLContext EASUI__SDL_CONTEXT;
 extern unsigned short FRAMETIME_MILLISECONDS;
 
+typedef struct EASUIvec3 EASUIvec3;
+
+struct EASUIvec3 {
+        float x;
+        float y;
+        float z;
+};
+
+typedef struct EASUIvec2 EASUIvec2;
+
+struct EASUIvec2 {
+        float x;
+        float y;
+};
 
 // ================================================== [FUNCTIONS] =================================================
 //
@@ -128,17 +142,20 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 SDL_Window* SDL_WINDOW;
                 EASUI_SCREEN* ACTIVE_SCREEN;
                 EASUI_SCREEN DEFAULT_SCREEN;
-                unsigned int WIDTH, HEIGHT;
+                EASUIvec2 SIZE;
                 int RESIZABLE;
                 int (*ADD_ELEMENT)(EASUI_WINDOW* WINDOW, void* ELEMENT);
                 int (*START)(EASUI_WINDOW* WINDOW);
                 void(*UPDATE_SIZE_AND_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
                 char* TITLE;
 
+                // FOR RENDERING TEST
+                EASUIvec3 BG_COLOR;
         };
 
 
-        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const unsigned int WIDTH, const unsigned int HEIGHT, const int RESIZABLE);
+        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const EASUIvec2 SIZE, const int RESIZABLE);
+        int SET_EASUI_WINDOW_BG_COLOR(EASUI_WINDOW* WINDOW, const EASUIvec3 BG_COLOR);
 
 // =============================================================================================================
 
@@ -154,14 +171,15 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 
                 char TYPE;
                 unsigned long MAX_STRING_SIZE;
-                unsigned int X_POSITION, Y_POSITION, WIDTH, HEIGHT, FONT_SIZE;
+                EASUIvec2 POSITION, SIZE;
+                unsigned int FONT_SIZE;
                 char* TEXT;
                 void (*TEST_FUNCTION)(const EASUI_LABEL* LABEL);
 
         };
 
 
-        int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const unsigned int X_POSITION, const unsigned int Y_POSITION, const unsigned int WIDTH, const unsigned int HEIGHT, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE);
+        int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const EASUIvec2 POSITION, const EASUIvec2 SIZE, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE);
 
 // ===============================================================================================================
 
