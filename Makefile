@@ -1,0 +1,18 @@
+C_FLAGS = -lSDL3 -lGL -lX11 -lXrandr -lm -I./EASUI
+OUTPUT_FOLDER = NOOUBYS_OUTPUT
+EASUI_SOURCE_FILES = $(shell find EASUI -name "*.c")
+
+
+
+
+
+TEST_1_CFILE = examples/test1/TEST.c
+TEST_1: $(TEST_1_CFILE)
+	gcc $(EASUI_SOURCE_FILES) $(TEST_1_CFILE) $(C_FLAGS) -o $(OUTPUT_FOLDER)/TEST_1
+
+
+
+
+RUN:
+	clear
+	./$(OUTPUT_FOLDER)/$(P)
