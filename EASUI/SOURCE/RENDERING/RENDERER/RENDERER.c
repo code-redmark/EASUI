@@ -1,22 +1,28 @@
 #include "../../EASUI.h"
+#include "../BACKEND//PRIMITIVES/PRIMITIVES.h"
 
 
-void EASUI__RENDER_ELEMENT(char ELEMENT_TYPE)
+void EASUI__RENDER_ELEMENT(void* ELEMENT)
 {
-    switch (ELEMENT_TYPE)
+    char TYPE = *(char*)ELEMENT;
+
+    switch (TYPE)
     {
-        case EASUI_FRAME_NUMBER:
+        case EASUI_FRAME_NUMBER: // frame is prob just going to be a way to group stuff
+            //RenderRectangle(POSITION, SIZE);
             break;
         case EASUI_SCREEN_NUMBER:
+            //RenderContainer or smth
             break;
         case EASUI_TEXTBOX_NUMBER:
+            //RenderRectangle(POSITION, SIZE);
+            //RenderTextfield(POSITION, (EASUI_TEXTBOX*)ELEMENT->TEXT, EASUI_FONT FONT);
             break;
     }
 }
 
 int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
 {
-
         if (WINDOW == NULL)
         {
 

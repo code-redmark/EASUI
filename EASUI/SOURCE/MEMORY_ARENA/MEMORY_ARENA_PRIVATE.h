@@ -1,5 +1,5 @@
+#ifndef MEMORY_ARENA
 #define MEMORY_ARENA
-#ifdef MEMORY_ARENA
 
 
 

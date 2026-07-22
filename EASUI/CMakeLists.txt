@@ -25,6 +25,17 @@ FetchContent_MakeAvailable(SDL3)
 
 # === === ===
 
+# === CGLM SETUP ===
+
+include(FetchContent)
+
+FetchContent_Declare(
+    cglm
+    GIT_REPOSITORY https://github.com/recp/cglm.git
+    GIT_TAG v0.9.6
+)
+
+FetchContent_MakeAvailable(cglm)
 
 # === LIBRARY SETUP ===
 
@@ -75,6 +86,7 @@ target_link_libraries(EASUI PUBLIC
     glad
     SDL3::SDL3-static
     COMMON
+    cglm
 )
 
 # === === ===

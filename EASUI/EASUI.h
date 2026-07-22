@@ -1,5 +1,5 @@
+#ifndef EASUI
 #define EASUI
-#ifdef EASUI
 
 
 #include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
@@ -89,15 +89,9 @@ int EASUI__WINDOW_MANAGER__RUN();
 
 int EASUI__ADD_WINDOW_TO_WINDOW_LIST(EASUI_WINDOW* WINDOW);
 
-
 EASUI_WINDOW* GET_FOCUSED_WINDOW();
 
-
-int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW);
-
-
 int EASUI__GET_EVENTS();
-
 
 int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT);
 
@@ -113,8 +107,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 
 
 // ================================================== [SCREEN] =================================================
-//
-
+        
         struct EASUI_SCREEN
         {
 
@@ -160,24 +153,6 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 // =============================================================================================================
 
 
-// =================================================== [FRAME] =================================================
-
-        typedef struct EASUI_FRAME EASUI_FRAME;
-
-        struct EASUI_FRAME 
-        {
-                
-                void** ELEMENT_LIST;
-                EASUIvec2 POSITION;
-                EASUIvec2 SIZE;
-                EASUIvec3 COLOR;
-                unsigned int ALPHA;
-                
-        };
-
-        int 
-
-// ===============================================================================================================
 
 // =================================================== [LABEL] =================================================
 

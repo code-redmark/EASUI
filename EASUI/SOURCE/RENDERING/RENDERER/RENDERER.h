@@ -1,0 +1,21 @@
+#ifndef RENDERER
+#define RENDERER
+
+#include "../../../EASUI.h"
+
+extern OPENGL_PRIMITIVE_DATA* RECTANGLE_DATA;
+
+/*
+	Goes through all the of the EASUI_WINDOW's elements
+	and calls EASUI__RENDER_ELEMENT for each
+*/
+int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW);
+
+/*
+	Renders every EASUI_ELEMENT based on its specific type,
+	the rendering happens by rendering multiple primitive 
+	objects "on top of each other"
+*/
+void EASUI__RENDER_ELEMENT(void* ELEMENT);
+
+#endif
