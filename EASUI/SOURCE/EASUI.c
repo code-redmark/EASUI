@@ -37,7 +37,7 @@ int EASUI__INIT(const unsigned short MAX_WINDOW_COUNT)
         }
 
 
-        INIT_MEMORY_ARENA(1024);
+        MEMORY_ARENA__INIT(1024);
 
 
         EASUI__WINDOW_MANAGER__INIT(MAX_WINDOW_COUNT);

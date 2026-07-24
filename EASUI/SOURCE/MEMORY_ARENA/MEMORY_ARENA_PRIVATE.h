@@ -10,32 +10,12 @@
 
 
 
-
-typedef struct MARENA_BLOCK
-{
-
-        void* NEXT;
-        size_t CAPACITY;
-        size_t OFFSET;
-        uint8_t DATA[];
-
-}MARENA_BLOCK;
-
-
-typedef struct
-{
-
-        MARENA_BLOCK* HEAD;
-        size_t DEFAULT_SIZE;
-
-}
-MARENA;
+#define MEMORY_ARENA_ERROR 0
+#define MEMORY_ARENA_OK 1
 
 
 
-
-
-void INIT_MEMORY_ARENA(size_t DEFAULT_SIZE);
+int MEMORY_ARENA__INIT(const size_t DEFAULT_ALLOCATION_SIZE);
 
 
 void* MEMORY_ARENA_ALLOC(size_t SIZE);

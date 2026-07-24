@@ -155,7 +155,6 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 
 
         int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const EASUIvec2 SIZE, const int RESIZABLE);
-        int SET_EASUI_WINDOW_BG_COLOR(EASUI_WINDOW* WINDOW, const EASUIvec3 BG_COLOR);
 
 // =============================================================================================================
 
