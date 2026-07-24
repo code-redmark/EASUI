@@ -65,7 +65,7 @@ int EASUI__RUN()
         }
 
 
-        if (WINDOW_MANAGER_RUN_STATUS == EASUI_OK)
+        if (WINDOW_MANAGER_RUN_STATUS == EASUI_ERROR)
         {
 
                 return EASUI_ERROR;
