@@ -1,10 +1,4 @@
-#include "MEMORY_ARENA_PRIVATE.h"
-#include "../../EASUI.h"
-
-
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "../EASUI_INTERNAL.h"
 
 
 
@@ -49,7 +43,7 @@ int MEMORY_ARENA__INIT(const size_t DEFAULT_ALLOCATION_SIZE)
         if (DEFAULT_ALLOCATION_SIZE == 0)
         {
 
-                return MEMORY_ARENA_ERROR;
+                return EASUI_ERROR;
 
         }
 
@@ -63,7 +57,7 @@ int MEMORY_ARENA__INIT(const size_t DEFAULT_ALLOCATION_SIZE)
         ALLOCATE_NEW_BLOCK(DEFAULT_BLOCK_SIZE);
 
 
-        return MEMORY_ARENA_OK;
+        return EASUI_OK;
 
 }
 
@@ -77,7 +71,7 @@ void* MEMORY_ARENA_ALLOC(const size_t SIZE)
                 const char ALLOCATE_NEW_BLOCK__STATUS = ALLOCATE_NEW_BLOCK(SIZE);
 
 
-                if (ALLOCATE_NEW_BLOCK__STATUS == MEMORY_ARENA_ERROR)
+                if (ALLOCATE_NEW_BLOCK__STATUS == EASUI_ERROR)
                 {
 
                         return NULL;
@@ -128,7 +122,7 @@ int ALLOCATE_NEW_BLOCK(const size_t BLOCK_SIZE)
         if (CURRENT_BLOCK == NULL)
         {
 
-                return MEMORY_ARENA_ERROR;
+                return EASUI_ERROR;
 
         }
 
@@ -161,7 +155,7 @@ int ALLOCATE_NEW_BLOCK(const size_t BLOCK_SIZE)
                         if (NEW_BLOCK == NULL)
                         {
 
-                                return MEMORY_ARENA_ERROR;
+                                return EASUI_ERROR;
 
                         }
 
@@ -185,7 +179,7 @@ int ALLOCATE_NEW_BLOCK(const size_t BLOCK_SIZE)
                 if (CURRENT_BLOCK->SPACE == NULL)
                 {
 
-                        return MEMORY_ARENA_ERROR;
+                        return EASUI_ERROR;
 
                 }
 
@@ -201,7 +195,7 @@ int ALLOCATE_NEW_BLOCK(const size_t BLOCK_SIZE)
         USING_STARTING_BLOCK = FALSE;
 
 
-        return MEMORY_ARENA_OK;
+        return EASUI_OK;
 
 }
 

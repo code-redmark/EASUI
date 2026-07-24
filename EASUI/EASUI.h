@@ -2,16 +2,11 @@
 #ifdef EASUI
 
 
-#include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
-
 #include "DEPENDENCIES/GLAD/include/glad/glad.h"
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include <SDL3/SDL.h>
 #include <stdio.h>
-
-
-#define EASUI__DEFAULT__REFRESH_RATE 60
-#define EASUI__DEFAULT__MEMORY_ARENA_SIZE 1024
+#include <stdlib.h>
 
 
 #define EASUI_NONE 0
@@ -19,57 +14,33 @@
 #define EASUI_OK 1
 
 
-
-enum EASUI_ELEMENT_TYPE_NUMBERS
-{
-
-        EASUI_WINDOW_NUMBER,
-        EASUI_SCREEN_NUMBER,
-        EASUI_TEXTBOX_NUMBER,
-        EASUI_LABEL_NUMBER
-
-};
-
-enum EASUI_WINDOW_STATUS_NUMBERS
-{
-
-        EASUI_WINDOW_UNINITIALIZED,
-        EASUI_WINDOW_READY,
-        EASUI_WINDOW_RUNNNING,
-        EASUI_WINDOW_CLOSED,
-
-};
-
-enum EASUI_WINDOW_EVENT_NUMBERS
-{
-
-        EASUI_NO_WINDOW_EVENT,
-        EASUI_CLOSE_WINDOW_EVENT,
-
-};
-
-
+typedef struct EASUI_BASE_ELEMENT EASUI_BASE_ELEMENT;
 typedef struct EASUI_SCREEN EASUI_SCREEN;
 typedef struct EASUI_WINDOW EASUI_WINDOW;
 
 
-extern SDL_GLContext EASUI__SDL_CONTEXT;
-extern unsigned short FRAMETIME_MILLISECONDS;
 
-typedef struct EASUIvec3 EASUIvec3;
 
-struct EASUIvec3 {
-        float x;
-        float y;
-        float z;
-};
+typedef struct EASUI_VEC3
+{
 
-typedef struct EASUIvec2 EASUIvec2;
+        float X;
+        float Y;
+        float Z;
 
-struct EASUIvec2 {
-        float x;
-        float y;
-};
+}
+EASUI_VEC3;
+
+
+typedef struct EASUI_VEC2
+{
+
+        float X;
+        float Y;
+
+}
+EASUI_VEC2;
+
 
 // ================================================== [FUNCTIONS] =================================================
 //
@@ -79,36 +50,23 @@ int EASUI__INIT(const unsigned short MAX_WINDOW_COUNT);
 
 int EASUI__RUN();
 
-
-int EASUI__WINDOW_MANAGER__INIT(const unsigned short MAX_WINDOW_COUNT);
-
-
-int EASUI__WINDOW_MANAGER__RUN();
-
-
-int EASUI__ADD_WINDOW_TO_WINDOW_LIST(EASUI_WINDOW* WINDOW);
-
-
-EASUI_WINDOW* GET_FOCUSED_WINDOW();
-
-
-int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW);
-
-
-int EASUI__GET_EVENTS();
-
-
-int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT);
-
-
-void LOG_EASUI_ERROR(const char* MESSAGE);
-
-
-void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
-
 //
 // ================================================================================================================
 
+
+
+// ================================================= [BASE ELEMENT] =============================================
+//
+
+        struct EASUI_BASE_ELEMENT
+        {
+
+                void* INTERNAL_DATA;
+
+        };
+
+//
+// =============================================================================================================
 
 
 // ================================================== [SCREEN] =================================================
@@ -117,10 +75,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
         struct EASUI_SCREEN
         {
 
-                char TYPE;
-                void** ELEMENT_LIST;
-                unsigned short LAST_ELEMENT_INDEX;
-                unsigned short MAX_ELEMENT_COUNT;
+                void* INTERNAL_DATA;
                 int (*ADD_ELEMENT)(EASUI_SCREEN* SCREEN, void* ELEMENT);
 
         };
@@ -140,11 +95,11 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 void* INTERNAL_DATA;
                 int (*ADD_ELEMENT)(EASUI_WINDOW* WINDOW, void* ELEMENT);
                 int (*START)(EASUI_WINDOW* WINDOW);
-                EASUIvec3 BG_COLOR;
+                EASUI_VEC3 BG_COLOR;
         };
 
 
-        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const EASUIvec2 SIZE, const int RESIZABLE);
+        int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const EASUI_VEC2 SIZE, const int RESIZABLE);
 
 // =============================================================================================================
 
@@ -158,17 +113,12 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
         struct EASUI_LABEL
         {
 
-                char TYPE;
-                unsigned long MAX_STRING_SIZE;
-                EASUIvec2 POSITION, SIZE;
-                unsigned int FONT_SIZE;
-                char* TEXT;
-                void (*TEST_FUNCTION)(const EASUI_LABEL* LABEL);
+                void* INTERNAL_DATA;
 
         };
 
 
-        int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const EASUIvec2 POSITION, const EASUIvec2 SIZE, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE);
+        int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const EASUI_VEC2 POSITION, const EASUI_VEC2 SIZE, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE);
 
 // ===============================================================================================================
 

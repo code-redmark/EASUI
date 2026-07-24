@@ -13,11 +13,11 @@ int main()
         EASUI_LABEL LABEL_1;
 
 
-        SET_NEW_EASUI_WINDOW(&WINDOW_1, "Window 1", 8, (EASUIvec2){.x = 800, .y = 800}, TRUE);
-        SET_NEW_EASUI_WINDOW(&WINDOW_2, "Window 2", 8, (EASUIvec2){.x = 800, .y = 600}, TRUE);
-        SET_NEW_EASUI_WINDOW(&WINDOW_3, "Window 3", 8, (EASUIvec2){.x = 600, .y = 800}, TRUE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_1, "Window 1", 8, (EASUI_VEC2){800, 800}, TRUE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_2, "Window 2", 8, (EASUI_VEC2){800, .600}, TRUE);
+        SET_NEW_EASUI_WINDOW(&WINDOW_3, "Window 3", 8, (EASUI_VEC2){600, 800}, TRUE);
 
-        //SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, 0, 0, 30, 30, 9, 1024);
+        SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, (EASUI_VEC2){0 , 0}, (EASUI_VEC2){30 , 30}, 9, 1024);
 
 
         WINDOW_1.START(&WINDOW_1);

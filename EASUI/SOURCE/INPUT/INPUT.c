@@ -1,4 +1,4 @@
-#include "../../EASUI.h"
+#include "../EASUI_INTERNAL.h"
 
 
 

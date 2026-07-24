@@ -1,4 +1,4 @@
-#include "../EASUI.h"
+#include "EASUI_INTERNAL.h"
 
 
 
@@ -78,19 +78,31 @@ int EASUI__RUN()
 }
 
 
-int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT)
+int ADD__ELEMENT__TO__FRAMED_ELEMENT(EASUI_BASE_ELEMENT* FRAMED_ELEMENT, void* ELEMENT)
 {
 
-        char FRAMED_TYPE = *(char*)FRAMED_ELEMENT;
+        int STATUS = EASUI_OK;
+        char FRAMED_TYPE = BASE_ELEMENT_INTERNAL_DATA(FRAMED_ELEMENT)->TYPE;
+
 
 
         if (FRAMED_TYPE == EASUI_WINDOW_NUMBER)
         {
 
-                #define FRAMED_PTR ((EASUI_WINDOW*)FRAMED_ELEMENT)
+                EASUI_WINDOW* WINDOW = ((EASUI_WINDOW*)FRAMED_ELEMENT);
 
 
-                FRAMED_PTR->ADD_ELEMENT(FRAMED_PTR, ELEMENT);
+                STATUS = WINDOW->ADD_ELEMENT(WINDOW, ELEMENT);
+
+
+        }
+        else if (FRAMED_TYPE == EASUI_SCREEN_NUMBER)
+        {
+
+                EASUI_SCREEN* SCREEN = ((EASUI_SCREEN*)FRAMED_ELEMENT);
+
+
+                STATUS = SCREEN->ADD_ELEMENT(SCREEN, ELEMENT);
 
         }
         else
@@ -101,7 +113,7 @@ int ADD__ELEMENT__TO__FRAMED_ELEMENT(void* FRAMED_ELEMENT, void* ELEMENT)
         }
 
 
-        return EASUI_OK;
+        return STATUS;
 
 }
 
