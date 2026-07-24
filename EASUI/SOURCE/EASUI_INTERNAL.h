@@ -1,0 +1,31 @@
+#include "../EASUI.h"
+
+
+#define EASUI_INTERNAL
+#ifdef EASUI_INTERNAL
+
+
+
+#define WINDOW_INTERNAL_DATA(WINDOW) ((EASUI_WINDOW__INTERNAL_DATA*)(WINDOW->INTERNAL_DATA))
+
+
+
+typedef struct EASUI_WINDOW__INTERNAL_DATA
+{
+
+        char TYPE;
+        char STATUS;
+        SDL_Window* SDL_WINDOW;
+        EASUI_SCREEN* ACTIVE_SCREEN;
+        EASUI_SCREEN DEFAULT_SCREEN;
+        EASUIvec2 SIZE;
+        int RESIZABLE;
+        void(*UPDATE_SIZE_AND_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
+        char* TITLE;
+
+}
+EASUI_WINDOW__INTERNAL_DATA;
+
+
+
+#endif

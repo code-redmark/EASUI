@@ -1,4 +1,4 @@
-#include "../../EASUI.h"
+#include "../EASUI_INTERNAL.h"
 
 
 
@@ -113,10 +113,10 @@ int EASUI__WINDOW_MANAGER__RUN()
                 if (WINDOW_EVENT == EASUI_CLOSE_WINDOW_EVENT)
                 {
 
-                        SDL_DestroyWindow(CURRENT_WINDOW->SDL_WINDOW);
+                        SDL_DestroyWindow(WINDOW_INTERNAL_DATA(CURRENT_WINDOW)->SDL_WINDOW);
 
 
-                        CURRENT_WINDOW->STATUS = EASUI_WINDOW_CLOSED;
+                        WINDOW_INTERNAL_DATA(CURRENT_WINDOW)->STATUS = EASUI_WINDOW_CLOSED;
 
 
                         continue;
@@ -127,7 +127,7 @@ int EASUI__WINDOW_MANAGER__RUN()
                 // [RENDER CURRENT WINDOW]
                 {
 
-                        CURRENT_WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE(CURRENT_WINDOW);
+                        WINDOW_INTERNAL_DATA(CURRENT_WINDOW)->UPDATE_SIZE_AND_CONTEXT_SIZE(CURRENT_WINDOW);
 
 
                         EASUI__RENDER_WINDOW(CURRENT_WINDOW);
@@ -154,7 +154,7 @@ int NO_WINDOWS_RUNNING()
         for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX ++)
         {
 
-                if (WINDOW_LIST[INDEX]->STATUS == EASUI_WINDOW_RUNNNING)
+                if (WINDOW_INTERNAL_DATA(WINDOW_LIST[INDEX])->STATUS == EASUI_WINDOW_RUNNNING)
                 {
 
                         return FALSE;
@@ -239,7 +239,7 @@ EASUI_WINDOW* GET_FOCUSED_WINDOW()
         for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX ++)
         {
 
-                if (WINDOW_LIST[INDEX]->SDL_WINDOW == FOCUSED_SDL_WINDOW)
+                if (WINDOW_INTERNAL_DATA(WINDOW_LIST[INDEX])->SDL_WINDOW == FOCUSED_SDL_WINDOW)
                 {
 
                         return WINDOW_LIST[INDEX];
@@ -274,7 +274,7 @@ EASUI_WINDOW* GET__WINDOW__FROM__SDL_WINDOW(const SDL_Window* SDL_WINDOW)
         for (unsigned short INDEX = 0; INDEX <= LAST_WINDOW_INDEX; INDEX ++)
         {
 
-                if (WINDOW_LIST[INDEX]->SDL_WINDOW == SDL_WINDOW)
+                if (WINDOW_INTERNAL_DATA(WINDOW_LIST[INDEX])->SDL_WINDOW == SDL_WINDOW)
                 {
 
                         return WINDOW_LIST[INDEX];

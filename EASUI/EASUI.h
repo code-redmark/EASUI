@@ -137,19 +137,9 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
         struct EASUI_WINDOW
         {
 
-                char TYPE;
-                char STATUS;
-                SDL_Window* SDL_WINDOW;
-                EASUI_SCREEN* ACTIVE_SCREEN;
-                EASUI_SCREEN DEFAULT_SCREEN;
-                EASUIvec2 SIZE;
-                int RESIZABLE;
+                void* INTERNAL_DATA;
                 int (*ADD_ELEMENT)(EASUI_WINDOW* WINDOW, void* ELEMENT);
                 int (*START)(EASUI_WINDOW* WINDOW);
-                void(*UPDATE_SIZE_AND_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
-                char* TITLE;
-
-                // FOR RENDERING TEST
                 EASUIvec3 BG_COLOR;
         };
 

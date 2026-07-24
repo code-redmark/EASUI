@@ -1,4 +1,4 @@
-#include "../../EASUI.h"
+#include "../EASUI_INTERNAL.h"
 
 
 
@@ -23,14 +23,14 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
                 // !----------------! TEMPORARY !----------------!
                 {
 
-                        SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
+                        SDL_GL_MakeCurrent(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW, EASUI__SDL_CONTEXT);
 
 
                         glClearColor(WINDOW->BG_COLOR.x, WINDOW->BG_COLOR.y, WINDOW->BG_COLOR.z, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-                        SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
+                        SDL_GL_SwapWindow(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW);
 
                 }
 

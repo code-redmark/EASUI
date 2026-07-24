@@ -1,4 +1,4 @@
-#include "../../EASUI.h"
+#include "../EASUI_INTERNAL.h"
 
 
 
@@ -33,18 +33,39 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
         }
 
 
+        // [ALLOCATE MEMORY FOR INTERNAL DATA]
+        {
+
+                WINDOW->INTERNAL_DATA = MEMORY_ARENA_ALLOC(sizeof(EASUI_WINDOW__INTERNAL_DATA));
+
+
+                if (WINDOW->INTERNAL_DATA == NULL)
+                {
+
+                        LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : FAILED TO ALLOCATE MEMORY FOR INTERNAL DATA");
+
+
+                        return EASUI_ERROR;
+
+                }
+
+        }
+
+
         // [SET BASE VALUES]
         {
 
-                WINDOW->TYPE = EASUI_WINDOW_NUMBER;
-                WINDOW->STATUS = EASUI_WINDOW_UNINITIALIZED;
-                WINDOW->SIZE = SIZE;
-                WINDOW->RESIZABLE = RESIZABLE;
-                WINDOW->ACTIVE_SCREEN = &WINDOW->DEFAULT_SCREEN;
+                WINDOW_INTERNAL_DATA(WINDOW)->TYPE = EASUI_WINDOW_NUMBER;
+                WINDOW_INTERNAL_DATA(WINDOW)->STATUS = EASUI_WINDOW_UNINITIALIZED;
+                WINDOW_INTERNAL_DATA(WINDOW)->SIZE = SIZE;
+                WINDOW_INTERNAL_DATA(WINDOW)->RESIZABLE = RESIZABLE;
+                WINDOW_INTERNAL_DATA(WINDOW)->ACTIVE_SCREEN = &WINDOW_INTERNAL_DATA(WINDOW)->DEFAULT_SCREEN;
+                WINDOW_INTERNAL_DATA(WINDOW)->UPDATE_SIZE_AND_CONTEXT_SIZE = UPDATE_SIZE_AND_CONTEXT_SIZE;
+
+
                 WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
                 WINDOW->START = START;
-                WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE = UPDATE_SIZE_AND_CONTEXT_SIZE;
-                WINDOW->BG_COLOR = (EASUIvec3){.x = 1.0f, .y = 1.0f, .z = 1.0f }; // white
+                WINDOW->BG_COLOR = (EASUIvec3){1.0f, 1.0f, 1.0f };
 
         }
 
@@ -52,7 +73,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
         // [ALLOCATE MEMORY FOR DEFAULT SCREEN ELEMENT LIST]
         {
 
-                const int SET_DEFAULT_SCREEN_STATUS = SET_NEW_EASUI_SCREEN(&WINDOW->DEFAULT_SCREEN, MAX_ELEMENT_COUNT);
+                const int SET_DEFAULT_SCREEN_STATUS = SET_NEW_EASUI_SCREEN(&WINDOW_INTERNAL_DATA(WINDOW)->DEFAULT_SCREEN, MAX_ELEMENT_COUNT);
 
 
                 if (SET_DEFAULT_SCREEN_STATUS == EASUI_ERROR)
@@ -71,10 +92,10 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 const unsigned long TITLE_SIZE = STRING_SIZE(TITLE);
 
 
-                WINDOW->TITLE = MEMORY_ARENA_ALLOC(TITLE_SIZE);
+                WINDOW_INTERNAL_DATA(WINDOW)->TITLE = MEMORY_ARENA_ALLOC(TITLE_SIZE);
 
 
-                if (WINDOW->TITLE == NULL)
+                if (WINDOW_INTERNAL_DATA(WINDOW)->TITLE == NULL)
                 {
 
                         LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : FAILED TO ALLOCATED MEMORY FOR WINDOW TITLE");
@@ -85,12 +106,12 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 }
 
 
-                STRING_COPY(WINDOW->TITLE, TITLE);
+                STRING_COPY(WINDOW_INTERNAL_DATA(WINDOW)->TITLE, TITLE);
 
         }
 
 
-        WINDOW->STATUS = EASUI_WINDOW_READY;
+        WINDOW_INTERNAL_DATA(WINDOW)->STATUS = EASUI_WINDOW_READY;
 
 
         // [ADD WINDOW TO WINDOW LIST]
@@ -102,7 +123,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 if (ADD_WINDOW_STATUS == EASUI_ERROR)
                 {
 
-                        WINDOW->STATUS = EASUI_WINDOW_UNINITIALIZED;
+                        WINDOW_INTERNAL_DATA(WINDOW)->STATUS = EASUI_WINDOW_UNINITIALIZED;
 
 
                         return EASUI_ERROR;
@@ -120,7 +141,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
 int START(EASUI_WINDOW* WINDOW)
 {
 
-        if (WINDOW->STATUS == EASUI_WINDOW_UNINITIALIZED)
+        if (WINDOW_INTERNAL_DATA(WINDOW)->STATUS == EASUI_WINDOW_UNINITIALIZED)
         {
 
                 LOG_EASUI_ERROR("FAILED TO START WINDOW : WINDOW WAS NOT INITIALIZED");
@@ -140,7 +161,7 @@ int START(EASUI_WINDOW* WINDOW)
                 // [SET SDL WINDOW FLAGS]
                 {
 
-                        if (WINDOW->RESIZABLE)
+                        if (WINDOW_INTERNAL_DATA(WINDOW)->RESIZABLE)
                         {
 
                                 SDL_WINDOW_FLAGS |= SDL_WINDOW_RESIZABLE;
@@ -153,10 +174,10 @@ int START(EASUI_WINDOW* WINDOW)
                 // [CREATE WINDOW]
                 {
 
-                        WINDOW->SDL_WINDOW = SDL_CreateWindow(WINDOW->TITLE, WINDOW->SIZE.x, WINDOW->SIZE.y, SDL_WINDOW_FLAGS);
+                        WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW = SDL_CreateWindow(WINDOW_INTERNAL_DATA(WINDOW)->TITLE, WINDOW_INTERNAL_DATA(WINDOW)->SIZE.x, WINDOW_INTERNAL_DATA(WINDOW)->SIZE.y, SDL_WINDOW_FLAGS);
 
 
-                        if (!WINDOW->SDL_WINDOW)
+                        if (!WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW)
                         {
 
                                 LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL WINDOW");
@@ -175,14 +196,14 @@ int START(EASUI_WINDOW* WINDOW)
                         if (EASUI__SDL_CONTEXT == EASUI_NONE)
                         {
 
-                                EASUI__SDL_CONTEXT = SDL_GL_CreateContext(WINDOW->SDL_WINDOW);
+                                EASUI__SDL_CONTEXT = SDL_GL_CreateContext(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW);
 
 
 
                                 if (!EASUI__SDL_CONTEXT)
                                 {
 
-                                        SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                                        SDL_DestroyWindow(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW);
 
 
                                         LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL CONTEXT");
@@ -200,7 +221,7 @@ int START(EASUI_WINDOW* WINDOW)
                                         if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
                                         {
 
-                                                SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                                                SDL_DestroyWindow(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW);
 
 
                                                 SDL_GL_DestroyContext(EASUI__SDL_CONTEXT);
@@ -218,7 +239,7 @@ int START(EASUI_WINDOW* WINDOW)
                         }
 
 
-                        SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
+                        SDL_GL_MakeCurrent(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW, EASUI__SDL_CONTEXT);
 
                 }
 
@@ -226,10 +247,10 @@ int START(EASUI_WINDOW* WINDOW)
                 SDL_GL_SetSwapInterval(1);
 
 
-                SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
+                SDL_GL_SwapWindow(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW);
 
 
-                WINDOW->STATUS = EASUI_WINDOW_RUNNNING;
+                WINDOW_INTERNAL_DATA(WINDOW)->STATUS = EASUI_WINDOW_RUNNNING;
 
 
                 EASUI__RENDER_WINDOW(WINDOW);
@@ -245,7 +266,7 @@ int START(EASUI_WINDOW* WINDOW)
 int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
 {
 
-        if (WINDOW->STATUS == EASUI_NONE || WINDOW->STATUS == EASUI_WINDOW_UNINITIALIZED)
+        if (WINDOW_INTERNAL_DATA(WINDOW)->STATUS == EASUI_NONE || WINDOW_INTERNAL_DATA(WINDOW)->STATUS == EASUI_WINDOW_UNINITIALIZED)
         {
 
                 LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO WINDOW : WINDOW WAS NOT INITIALIZED");
@@ -256,7 +277,7 @@ int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
         }
 
 
-        int ADD_ELEMENT_STATUS = (WINDOW->DEFAULT_SCREEN).ADD_ELEMENT(&WINDOW->DEFAULT_SCREEN, ELEMENT);
+        int ADD_ELEMENT_STATUS = WINDOW_INTERNAL_DATA(WINDOW)->DEFAULT_SCREEN.ADD_ELEMENT(&WINDOW_INTERNAL_DATA(WINDOW)->DEFAULT_SCREEN, ELEMENT);
 
 
         if (ADD_ELEMENT_STATUS == EASUI_ERROR)
@@ -289,7 +310,7 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         }
 
 
-        const int GET_WINDOW_SIZE_STATUS = SDL_GetWindowSizeInPixels(WINDOW->SDL_WINDOW, &NEW_WINDOW_WIDTH, &NEW_WINDOW_HEIGHT);
+        const int GET_WINDOW_SIZE_STATUS = SDL_GetWindowSizeInPixels(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW, &NEW_WINDOW_WIDTH, &NEW_WINDOW_HEIGHT);
 
 
         if (!GET_WINDOW_SIZE_STATUS)
@@ -303,8 +324,8 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         }
 
 
-        WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
-        WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+        WINDOW_INTERNAL_DATA(WINDOW)->SIZE.x = NEW_WINDOW_WIDTH;
+        WINDOW_INTERNAL_DATA(WINDOW)->SIZE.y = NEW_WINDOW_HEIGHT;
 
 
         glViewport(0, 0, NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT);
