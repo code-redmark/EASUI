@@ -22,7 +22,7 @@ int main()
         WINDOW_3.BG_COLOR = (EASUIvec3){ .x = 0.0f, .y = 0.0f, .z = 1.0f };
 
         
-        SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, (EASUIvec2) { 0.f, 0.f }, (EASUIvec2) {0.2f, 0.15f}, 9, 1024);
+        SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, (EASUIvec2) { 0.1f, 0.1f }, (EASUIvec2) {0.2f, 0.15f}, 9, 1024);
 
 
         WINDOW_1.START(&WINDOW_1);

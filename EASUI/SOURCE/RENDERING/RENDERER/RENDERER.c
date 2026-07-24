@@ -18,7 +18,7 @@ void EASUI__RENDER_ELEMENT(void* ELEMENT)
         case EASUI_LABEL_NUMBER:
             {
                 EASUI_LABEL* LABEL = (EASUI_LABEL*)ELEMENT;
-                RenderRectangle(LABEL->SIZE, 0.f, LABEL->POSITION, (EASUIvec3) { 1.f, 1.f, 1.f });
+                RenderRectangle(LABEL->SIZE, 0.f, LABEL->POSITION, (EASUIvec3) { 127.f, 0.f, 255.f });
             };
             break;
         case EASUI_SCREEN_NUMBER:
@@ -62,7 +62,7 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
 
                         for (int i = 0; i < current->LAST_ELEMENT_INDEX + 1; i++)
                         {
-                            EASUI__RENDER_ELEMENT(current->ELEMENT_LIST[i]);
+                            if (current->ELEMENT_LIST[i] != NULL) EASUI__RENDER_ELEMENT(current->ELEMENT_LIST[i]);
                         }
 
                         SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
