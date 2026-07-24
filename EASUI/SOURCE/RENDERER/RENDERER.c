@@ -9,7 +9,7 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
         if (WINDOW == NULL)
         {
 
-                LOG_EASUI_ERROR("FAILED TO RENDER WINDOW : WINDOW IS NULL");
+                LOG_EASUI_ERROR("FAILED TO RENDER WINDOW", "WINDOW IS NULL");
 
 
                 return EASUI_ERROR;

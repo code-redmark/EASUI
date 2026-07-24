@@ -103,10 +103,10 @@
         void FREE_MEMORY_ARENA(void);
 
 
-        void LOG_EASUI_ERROR(const char* MESSAGE);
+        void LOG_EASUI_ERROR(const char* MESSAGE, const char* DESCRIPTION);
 
 
-        void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
+        void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE, const char* DESCRIPTION);
 
 //
 // ====================================================================================================================

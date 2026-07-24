@@ -17,13 +17,17 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW);
 int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned short MAX_ELEMENT_COUNT, const EASUI_VEC2 SIZE, const int RESIZABLE)
 {
 
+        const char* MESSAGE = "FAILED TO SET NEW WINDOW";
+
+
+
         // [CHECK FOR NULL POINTERS]
         {
 
                 if (WINDOW == NULL || TITLE == NULL || (SIZE.X <= 0 || SIZE.Y <= 0))
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : BAD_ARGUMENTS");
+                        LOG_EASUI_ERROR(MESSAGE, "BAD_ARGUMENTS");
 
 
                         return EASUI_ERROR;
@@ -42,7 +46,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 if (WINDOW->INTERNAL_DATA == NULL)
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : FAILED TO ALLOCATE MEMORY FOR INTERNAL DATA");
+                        LOG_EASUI_ERROR(MESSAGE, "FAILED TO ALLOCATE MEMORY FOR INTERNAL DATA");
 
 
                         return EASUI_ERROR;
@@ -98,7 +102,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 if (WINDOW_INTERNAL_DATA(WINDOW)->TITLE == NULL)
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO SET NEW WINDOW : FAILED TO ALLOCATED MEMORY FOR WINDOW TITLE");
+                        LOG_EASUI_ERROR(MESSAGE, "FAILED TO ALLOCATED MEMORY FOR WINDOW TITLE");
 
 
                         return EASUI_ERROR;
@@ -141,10 +145,40 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
 int START(EASUI_WINDOW* WINDOW)
 {
 
+        const char* MESSAGE = "FAILED TO START WINDOW";
+
+
+        // [NULL POINTER CHECKS]
+        {
+
+                if (WINDOW == NULL)
+                {
+
+                        LOG_EASUI_ERROR(MESSAGE, "WINDOW IS NULL");
+
+
+                        return EASUI_ERROR;
+
+                }
+
+
+                if (WINDOW->INTERNAL_DATA == NULL)
+                {
+
+                        LOG_EASUI_ERROR(MESSAGE, "INTERNAL DATA IS NULL");
+
+
+                        return EASUI_ERROR;
+
+                }
+
+        }
+
+
         if (WINDOW_INTERNAL_DATA(WINDOW)->STATUS == EASUI_WINDOW_UNINITIALIZED)
         {
 
-                LOG_EASUI_ERROR("FAILED TO START WINDOW : WINDOW WAS NOT INITIALIZED");
+                LOG_EASUI_ERROR(MESSAGE, "WINDOW WAS NOT INITIALIZED");
 
 
                 return EASUI_ERROR;
@@ -180,7 +214,7 @@ int START(EASUI_WINDOW* WINDOW)
                         if (!WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW)
                         {
 
-                                LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL WINDOW");
+                                LOG_EASUI_ERROR(MESSAGE, "FAILED TO CREATE SDL WINDOW");
 
 
                                 return EASUI_ERROR;
@@ -206,7 +240,7 @@ int START(EASUI_WINDOW* WINDOW)
                                         SDL_DestroyWindow(WINDOW_INTERNAL_DATA(WINDOW)->SDL_WINDOW);
 
 
-                                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO CREATE SDL CONTEXT");
+                                        LOG_EASUI_ERROR(MESSAGE, "FAILED TO CREATE SDL CONTEXT");
 
 
                                         return EASUI_ERROR;
@@ -227,7 +261,7 @@ int START(EASUI_WINDOW* WINDOW)
                                                 SDL_GL_DestroyContext(EASUI__SDL_CONTEXT);
 
 
-                                                LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO LOAD GLAD");
+                                                LOG_EASUI_ERROR(MESSAGE, "FAILED TO LOAD GLAD");
 
 
                                                 return EASUI_ERROR;
@@ -266,10 +300,36 @@ int START(EASUI_WINDOW* WINDOW)
 int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
 {
 
+        const char* MESSAGE = "WINDOW FAILED TO ADD ELEMENT";
+
+
+
+        if (WINDOW == NULL)
+        {
+
+                LOG_EASUI_ERROR(MESSAGE, "WINDOW IS NULL");
+
+
+                return EASUI_ERROR;
+
+        }
+
+
+        if (WINDOW->INTERNAL_DATA == NULL)
+        {
+
+                LOG_EASUI_ERROR(MESSAGE, "INTERNAL DATA IS NULL");
+
+
+                return EASUI_ERROR;
+
+        }
+
+
         if (WINDOW_INTERNAL_DATA(WINDOW)->STATUS == EASUI_NONE || WINDOW_INTERNAL_DATA(WINDOW)->STATUS == EASUI_WINDOW_UNINITIALIZED)
         {
 
-                LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO WINDOW : WINDOW WAS NOT INITIALIZED");
+                LOG_EASUI_ERROR(MESSAGE, "WINDOW WAS NOT INITIALIZED");
 
 
                 return EASUI_ERROR;
@@ -296,13 +356,17 @@ int WINDOW_ADD_ELEMENT(EASUI_WINDOW* WINDOW, void* ELEMENT)
 void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
 {
 
+        const char* MESSAGE = "FAILED TO RESIZE WINDOW";
+
+
         int NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT;
+
 
 
         if (WINDOW == NULL)
         {
 
-                LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : WINDOW IS NULL");
+                LOG_EASUI_ERROR(MESSAGE, "WINDOW IS NULL");
 
 
                 return;
@@ -316,7 +380,7 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         if (!GET_WINDOW_SIZE_STATUS)
         {
 
-                LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : SDL FAILED TO GET WINDOW SIZE");
+                LOG_EASUI_ERROR(MESSAGE, "SDL FAILED TO GET WINDOW SIZE");
 
 
                 return;

@@ -11,13 +11,17 @@ void TEST_FUNCTION(const EASUI_LABEL* LABEL);
 int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const EASUI_VEC2 POSITION, const EASUI_VEC2 SIZE, const unsigned int FONT_SIZE, const unsigned long MAX_STRING_SIZE)
 {
 
+        const char* MESSAGE = "FAILED TO ADD NEW EASUI LABEL";
+
+
+
         // [CHECK FOR NULL POINTERS]
         {
 
                 if (LABEL == NULL)
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO ADD NEW EASUI LABEL : LABEL IS NULL");
+                        LOG_EASUI_ERROR(MESSAGE, "LABEL IS NULL");
 
 
                         return EASUI_ERROR;
@@ -36,7 +40,7 @@ int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const
                 if (LABEL->INTERNAL_DATA == NULL)
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO SET NEW LABEL : FAILED TO ALLOCATE MEMORY FOR INTERNAL DATA");
+                        LOG_EASUI_ERROR(MESSAGE, "FAILED TO ALLOCATE MEMORY FOR INTERNAL DATA");
 
 
                         return EASUI_ERROR;
@@ -67,7 +71,7 @@ int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const
                 if (ADD_TO_HOLDER_STATUS == EASUI_ERROR)
                 {
 
-                        LOG_EASUI_ERROR("FAILED TO SET NEW LABEL : FAILED TO ADD LABEL TO OPTIONAL HOLDER");
+                        LOG_EASUI_ERROR(MESSAGE, "FAILED TO ADD LABEL TO OPTIONAL HOLDER");
 
 
                         return EASUI_ERROR;
