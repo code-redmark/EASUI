@@ -2,8 +2,7 @@
 
 #include "BACKEND/PRIMITIVES/PRIMITIVES.h"
 
-void INIT_RENDERING()
+void EASUI__RENDERING_INIT()
 {
-	RECTANGLE_DATA = NULL;
 	LoadPrimitives();
 }

@@ -3,7 +3,12 @@
 
 #include "../../../EASUI.h"
 
-extern OPENGL_PRIMITIVE_DATA* RECTANGLE_DATA;
+extern OBJECT_RENDERING_DATA *RECTANGLE_DATA;
+
+/*
+	Basic shader for rendering all of EASUIs primitives
+*/
+extern GLuint* EASUI_PRIMITIVE_SHADER_PROGRAM;
 
 /*
 	Goes through all the of the EASUI_WINDOW's elements

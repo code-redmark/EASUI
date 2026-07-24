@@ -42,7 +42,6 @@ int EASUI__INIT(const unsigned short MAX_WINDOW_COUNT)
 
         EASUI__WINDOW_MANAGER__INIT(MAX_WINDOW_COUNT);
 
-
         return EASUI_OK;
 
 }

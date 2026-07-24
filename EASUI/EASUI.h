@@ -4,7 +4,9 @@
 
 #include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
 
+#include <cglm/cglm.h>
 #include "DEPENDENCIES/GLAD/include/glad/glad.h"
+#include "SOURCE/RENDERING//RENDERING.h"
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include <SDL3/SDL.h>
 #include <stdio.h>
@@ -13,10 +15,24 @@
 #define EASUI__DEFAULT__REFRESH_RATE 60
 #define EASUI__DEFAULT__MEMORY_ARENA_SIZE 1024
 
-
 #define EASUI_NONE 0
 #define EASUI_ERROR 0
 #define EASUI_OK 1
+
+typedef struct EASUIvec2 EASUIvec2;
+struct EASUIvec2
+{
+    float x;
+    float y;
+};
+
+typedef struct EASUIvec3 EASUIvec3;
+struct EASUIvec3
+{
+    float x;
+    float y;
+    float z;
+};
 
 
 
@@ -56,21 +72,6 @@ typedef struct EASUI_WINDOW EASUI_WINDOW;
 
 extern SDL_GLContext EASUI__SDL_CONTEXT;
 extern unsigned short FRAMETIME_MILLISECONDS;
-
-typedef struct EASUIvec3 EASUIvec3;
-
-struct EASUIvec3 {
-        float x;
-        float y;
-        float z;
-};
-
-typedef struct EASUIvec2 EASUIvec2;
-
-struct EASUIvec2 {
-        float x;
-        float y;
-};
 
 // ================================================== [FUNCTIONS] =================================================
 //

@@ -7,7 +7,47 @@
 #include <GLAD/glad.h>
 #include <cglm/cglm.h>
 
-void INIT_RENDERING();
+
+#define PRIMITIVE_VERTEX_SHADER_SOURCE \
+"#version 330 core\n" \
+"\n" \
+"layout(location = 0) in vec2 aPosition;\n" \
+"\n" \
+"uniform mat4 uModel;\n" \
+"uniform mat4 uView;\n" \
+"uniform mat4 uProjection;\n" \
+"\n" \
+"void main()\n" \
+"{\n" \
+"    gl_Position = uProjection * uView * uModel * vec4(aPosition, 0.0, 1.0);\n" \
+"}\n"
+
+
+#define PRIMITIVE_FRAGMENT_SHADER_SOURCE \
+"#version 330 core\n" \
+"\n" \
+"uniform vec4 uColor;\n" \
+"\n" \
+"out vec4 FragColor;\n" \
+"\n" \
+"void main()\n" \
+"{\n" \
+"    FragColor = uColor;\n" \
+"}\n"
+
+#define MODEL_MAT_UNIFORM_NAME "uModel"
+#define VIEW_MAT_UNIFORM_NAME "uView"
+#define PROJ_MAT_UNIFORM_NAME "uProjection"
+
+#define FRAGMENT_COLOR_UNIFORM_NAME "uColor"
+
+/*
+	EASUI.h INIT function rendering part
+
+	Initializes rendering globals and
+	loads primitives
+*/
+void EASUI__RENDERING_INIT();
 
 typedef struct GPUBuffer GPUBuffer;
 
@@ -22,15 +62,19 @@ struct GPUBuffer {
 	GLuint stride;
 };
 
-typedef struct OPENGL_PRIMITIVE_DATA OPENGL_PRIMITIVE_DATA;
+typedef struct OBJECT_RENDERING_DATA OBJECT_RENDERING_DATA;
 /*
-	Contains data common to EASUIs primitive shapes (rectangles, circles etc.)
+	Contains all the data needed to render an object
+	with OpenGL glDrawArrays() or glDrawElements()
 */
-struct OPENGL_PRIMITIVE_DATA {
+struct OBJECT_RENDERING_DATA {
 	GLuint VAO;
+	GLuint PROGRAM;
 
-	size_t vertCount;
-	size_t indexCount;
+	size_t VERTEX_COUNT;
+
+	bool INDEXED;
+	size_t INDEX_COUNT;
 
 
 	/*
@@ -39,6 +83,7 @@ struct OPENGL_PRIMITIVE_DATA {
 	*/
 	GLenum MODE;
 };
+
 
 
 #endif
