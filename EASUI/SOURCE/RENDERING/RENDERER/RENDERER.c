@@ -28,6 +28,8 @@ void EASUI__RENDER_ELEMENT(void* ELEMENT)
             //RenderTextfield(POSITION, (EASUI_TEXTBOX*)ELEMENT->TEXT, EASUI_FONT FONT);
             break;
     }
+
+    printf("[EASUI__RENDER_ELEMENT] Rendered element of type %d OK\n", TYPE);
 }
 
 int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
@@ -47,34 +49,18 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
 
                         SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
 
-                        
+                        WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE(WINDOW);
+                        UPDATE_PROJECTION_DATA(WINDOW);
+
+                        glViewport(0, 0, (int)WINDOW->SIZE.x, (int)WINDOW->SIZE.y);
 
                         glClearColor(WINDOW->BG_COLOR.x, WINDOW->BG_COLOR.y, WINDOW->BG_COLOR.z, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                        mat4 transform;
-                        glm_mat4_identity(transform);
+                        printf("[EASUI__RENDER_WINDOW] window size: %fx%f\n", WINDOW->SIZE.x, WINDOW->SIZE.y);
 
-                        glm_scale(transform, (vec3) { 200.f, 80.f, 1.f });
-                        glm_translate(transform, (vec3) { 0.f, 0.f, 0.f });
-                        //glm_rotate(transform, ROTATION, (vec3) { 0.f, 0.f, 1.f });
-                        
+                        RenderRectangle((EASUIvec2) { 200.f, 80.f }, 0.f, (EASUIvec2) { 100.f, 100.f }, (EASUIvec3) { 1.f, 0.f, 1.f });
 
-                        vec4 color = { 1.f, 1.f, 1.f, 1.f };
-
-                        glad_glUseProgram(RECTANGLE_DATA.PROGRAM);
-
-                        glad_glBindVertexArray(RECTANGLE_DATA.VAO);
-
-                        GLint modelLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, MODEL_MAT_UNIFORM_NAME);
-                        glad_glUniformMatrix4fv(modelLocation, 1, GL_FALSE, (float*)transform);
-
-                        GLint colorLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, FRAGMENT_COLOR_UNIFORM_NAME);
-                        glad_glUniform4fv(colorLocation, 1, (float*)color);
-
-                        glad_glDrawElements(GL_TRIANGLES, RECTANGLE_DATA.INDEX_COUNT, GL_UNSIGNED_INT, (void*)0);
-                        
-                        
                         //EASUI_SCREEN* current = WINDOW->ACTIVE_SCREEN != &WINDOW->DEFAULT_SCREEN ? WINDOW->ACTIVE_SCREEN : &WINDOW->DEFAULT_SCREEN;
 
                         //for (int i = 0; i < current->LAST_ELEMENT_INDEX + 1; i++)
@@ -83,6 +69,10 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
                         //}
 
                         SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
+
+                        GLenum err = glad_glGetError();
+                        if (err != GL_NO_ERROR) printf("[EASUI__RENDER_WINDOW] GL error after render: %d\n", err);
+                        else printf("[EASUI__RENDER_WINDOW] Window rendered OK\n");
 
                 }
 

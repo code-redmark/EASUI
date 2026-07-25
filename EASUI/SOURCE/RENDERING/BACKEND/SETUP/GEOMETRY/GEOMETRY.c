@@ -12,9 +12,9 @@ const GPUBuffer makeGPUBuffer(GLenum type, const GLuint size, const void* data, 
 	glad_glBufferData(type, size, data, usage);
 	glad_glBindBuffer(type, 0);
 	
-    GLenum err = glad_glGetError();
-    if (err != GL_NO_ERROR) printf("\nError: %d\n", err);
-    else printf("gpu buffer good!\n\n");
+	GLenum err = glad_glGetError();
+	if (err != GL_NO_ERROR) printf("[makeGPUBuffer] GL error: %d\n", err);
+	else printf("[makeGPUBuffer] GPU buffer created OK (id=%u)\n", vbo);
 
 	return (GPUBuffer)
 	{
@@ -50,8 +50,8 @@ const GLuint makeVao(const GPUBuffer vbo, const GPUBuffer ebo)
     glad_glBindVertexArray(0);
 
     GLenum err = glad_glGetError();
-    if (err != GL_NO_ERROR) printf("\nError makeVao: %d\n", err);
-    else printf("makeVao good!!\n\n");
+    if (err != GL_NO_ERROR) printf("[makeVao] GL error: %d\n", err);
+    else printf("[makeVao] VAO created OK (id=%u)\n", vao);
 
     return vao;
 }

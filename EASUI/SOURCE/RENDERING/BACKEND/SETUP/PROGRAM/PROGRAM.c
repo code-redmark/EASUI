@@ -13,6 +13,8 @@ GLuint makeShader(const char* source, GLenum SHADER_TYPE)
         char infoLog[512];
         glad_glGetShaderInfoLog(shader, 512, NULL, infoLog);
         printf("Shader compile error: %s\n", infoLog);
+    } else {
+        printf("[makeShader] Shader compiled OK (id=%u, type=%u)\n", shader, SHADER_TYPE);
     }
 
     return shader;
@@ -55,6 +57,10 @@ GLuint makeShaderProgram(GLuint vertShader, GLuint fragShader)
     glad_glUniformMatrix4fv(location, 1, GL_FALSE, (const GLfloat*)view_matrix);
 
     glad_glUseProgram(0);
+
+    GLenum err = glad_glGetError();
+    if (err != GL_NO_ERROR) printf("[makeShaderProgram] GL error: %d\n", err);
+    else printf("[makeShaderProgram] Shader program linked OK (program=%u)\n", program);
 
     return program;
 }

@@ -9,6 +9,7 @@ int LoadPrimitives()
 	LoadPrimitiveShaderProgram();
 
 	makeRectangle();
+	printf("[LoadPrimitives] Primitives loaded OK\n");
 	return EASUI_OK;
 
 }
@@ -25,6 +26,10 @@ void LoadPrimitiveShaderProgram()
 	GLuint fragmentShader = makeShader(PRIMITIVE_FRAGMENT_SHADER_SOURCE, GL_FRAGMENT_SHADER);
 
 	EASUI_PRIMITIVE_SHADER_PROGRAM = makeShaderProgram(vertexShader, fragmentShader);
+
+	GLenum err = glad_glGetError();
+	if (err != GL_NO_ERROR) printf("[LoadPrimitiveShaderProgram] GL error after load: %d\n", err);
+	else printf("[LoadPrimitiveShaderProgram] Shader program loaded OK (program=%u)\n", EASUI_PRIMITIVE_SHADER_PROGRAM);
 }
 
 void makeRectangle()
@@ -68,6 +73,7 @@ void makeRectangle()
 	printf("VAO: %u\n", RECTANGLE_DATA.VAO);
 	printf("PROGRAM: %u\n", RECTANGLE_DATA.PROGRAM);
 	printf("MODE: %u\n", RECTANGLE_DATA.MODE);
+	printf("[makeRectangle] Rectangle created OK\n");
 }
 
 void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, EASUIvec3 COLOR)
@@ -88,10 +94,27 @@ void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, E
 	glad_glBindVertexArray(RECTANGLE_DATA.VAO);
 
 	GLint modelLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, MODEL_MAT_UNIFORM_NAME);
-	glad_glUniformMatrix4fv(modelLocation, 1, GL_FALSE, (float*)transform);
-
+	GLint viewLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, VIEW_MAT_UNIFORM_NAME);
+	GLint projLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, PROJ_MAT_UNIFORM_NAME);
 	GLint colorLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, FRAGMENT_COLOR_UNIFORM_NAME);
-	glad_glUniform4fv(colorLocation, 1, (float*)color);
+
+	mat4 viewMatrix;
+	glm_mat4_identity(viewMatrix);
+
+	printf("[RenderRectangle] modelLoc=%d viewLoc=%d projLoc=%d colorLoc=%d\n", modelLocation, viewLocation, projLocation, colorLocation);
+	printf("[RenderRectangle] proj mat: [%f %f %f %f]\n", currentProjMat[0][0], currentProjMat[1][1], currentProjMat[3][0], currentProjMat[3][1]);
+
+	glad_glDisable(GL_DEPTH_TEST);
+	glad_glDisable(GL_CULL_FACE);
+
+	if (modelLocation != -1) glad_glUniformMatrix4fv(modelLocation, 1, GL_FALSE, (float*)transform);
+	if (viewLocation != -1)   glad_glUniformMatrix4fv(viewLocation,   1, GL_FALSE, (float*)viewMatrix);
+	if (projLocation != -1)   glad_glUniformMatrix4fv(projLocation,   1, GL_FALSE, (GLfloat*)currentProjMat);
+	if (colorLocation != -1) glad_glUniform4fv(colorLocation, 1, (float*)color);
 
 	glad_glDrawElements(RECTANGLE_DATA.MODE, RECTANGLE_DATA.INDEX_COUNT, GL_UNSIGNED_INT, (void*)0);
+
+	GLenum err = glad_glGetError();
+	if (err != GL_NO_ERROR) printf("[RenderRectangle] GL error after draw: %d\n", err);
+	else printf("[RenderRectangle] Rectangle draw call OK\n");
 }

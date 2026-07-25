@@ -27,7 +27,7 @@ extern GLuint EASUI_PRIMITIVE_SHADER_PROGRAM;
 "\n" \
 "void main()\n" \
 "{\n" \
-"    gl_Position = vec4(aPosition, 0.0, 1.0);\n" \
+"    gl_Position = uProjection * uView * uModel * vec4(aPosition, 0.0, 1.0);\n" \
 "}\n"
 
 
