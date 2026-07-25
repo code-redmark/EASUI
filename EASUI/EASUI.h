@@ -5,8 +5,7 @@
 #include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
 
 #include <cglm/cglm.h>
-#include "DEPENDENCIES/GLAD/include/glad/glad.h"
-#include "SOURCE/RENDERING//RENDERING.h"
+#include <stdbool.h>
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include <SDL3/SDL.h>
 #include <stdio.h>

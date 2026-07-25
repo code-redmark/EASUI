@@ -1,12 +1,20 @@
 /*
 	Contains all rendering data types and basic functions
 */
-#ifndef RENDERING
-#define RENDERING
+#ifndef EASUI_RENDERING_H
+#define EASUI_RENDERING_H
 
+#include "../../EASUI.h"
 #include <GLAD/glad.h>
 #include <cglm/cglm.h>
 
+typedef struct OBJECT_RENDERING_DATA OBJECT_RENDERING_DATA;
+extern OBJECT_RENDERING_DATA RECTANGLE_DATA;
+
+/*
+	Basic shader for rendering all of EASUIs primitives
+*/
+extern GLuint EASUI_PRIMITIVE_SHADER_PROGRAM;
 
 #define PRIMITIVE_VERTEX_SHADER_SOURCE \
 "#version 330 core\n" \
@@ -19,7 +27,7 @@
 "\n" \
 "void main()\n" \
 "{\n" \
-"    gl_Position = uProjection * uView * uModel * vec4(aPosition, 0.0, 1.0);\n" \
+"    gl_Position = vec4(aPosition, 0.0, 1.0);\n" \
 "}\n"
 
 
@@ -62,7 +70,7 @@ struct GPUBuffer {
 	GLuint stride;
 };
 
-typedef struct OBJECT_RENDERING_DATA OBJECT_RENDERING_DATA;
+
 /*
 	Contains all the data needed to render an object
 	with OpenGL glDrawArrays() or glDrawElements()
@@ -84,6 +92,18 @@ struct OBJECT_RENDERING_DATA {
 	GLenum MODE;
 };
 
+typedef struct PROJECTION_DATA PROJECTION_DATA;
 
+//struct PROJECTION_DATA
+//{
+//	mat4 CURRENT_PROJECTION_MAT;
+//	unsigned int CURRENT_WIDTH;
+//	unsigned int CURRENT_HEIGHT;
+//};
+//
+//extern PROJECTION_DATA currentProjData;
+extern mat4 currentProjMat;
+
+void UPDATE_PROJECTION_DATA(EASUI_WINDOW* win);
 
 #endif

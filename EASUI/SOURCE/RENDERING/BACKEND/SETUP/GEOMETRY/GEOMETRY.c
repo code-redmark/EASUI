@@ -1,15 +1,21 @@
 #include "GEOMETRY.h"
 
-const GPUBuffer makeGPUBuffer(const GLuint size, const void* data, const GLuint stride, const GLenum usage)
+const GPUBuffer makeGPUBuffer(GLenum type, const GLuint size, const void* data, const GLuint stride, const GLenum usage)
 {
+    char* typeS = type == GL_ARRAY_BUFFER ? "vbo" : "ebo";
+    printf("making GPUbuffer for %s\n", typeS);
 	GLuint vbo;
 
 	glad_glGenBuffers(1, &vbo);
 
-	glad_glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glad_glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-	glad_glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glad_glBindBuffer(type, vbo);
+	glad_glBufferData(type, size, data, usage);
+	glad_glBindBuffer(type, 0);
 	
+    GLenum err = glad_glGetError();
+    if (err != GL_NO_ERROR) printf("\nError: %d\n", err);
+    else printf("gpu buffer good!\n\n");
+
 	return (GPUBuffer)
 	{
 		.id = vbo,
@@ -42,6 +48,10 @@ const GLuint makeVao(const GPUBuffer vbo, const GPUBuffer ebo)
     );
 
     glad_glBindVertexArray(0);
+
+    GLenum err = glad_glGetError();
+    if (err != GL_NO_ERROR) printf("\nError makeVao: %d\n", err);
+    else printf("makeVao good!!\n\n");
 
     return vao;
 }

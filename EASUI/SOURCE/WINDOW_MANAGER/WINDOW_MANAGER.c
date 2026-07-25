@@ -109,7 +109,6 @@ int EASUI__WINDOW_MANAGER__RUN()
 
                 }
 
-
                 if (WINDOW_EVENT == EASUI_CLOSE_WINDOW_EVENT)
                 {
 

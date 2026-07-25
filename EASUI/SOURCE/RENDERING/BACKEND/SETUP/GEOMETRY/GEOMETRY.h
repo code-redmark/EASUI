@@ -4,7 +4,7 @@
 #include <GLAD/glad.h>
 #include "../../../RENDERING.h"
 
-const GPUBuffer makeGPUBuffer(const GLuint size, const void* data, const GLuint stride, const GLenum usage);
+const GPUBuffer makeGPUBuffer(GLenum type, const GLuint size, const void* data, const GLuint stride, const GLenum usage);
 
 /*
     Creates a new vao with the given vbo and ebo.

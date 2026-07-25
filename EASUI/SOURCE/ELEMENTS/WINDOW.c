@@ -1,4 +1,6 @@
 #include "../../EASUI.h"
+#include <glad/glad.h>
+#include "../RENDERING/RENDERING.h"
 
 
 
@@ -227,6 +229,7 @@ int START(EASUI_WINDOW* WINDOW)
 
 
                         SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
+                        UPDATE_SIZE_AND_CONTEXT_SIZE(WINDOW);
                         
 
                 }
@@ -291,8 +294,6 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         {
 
                 LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : WINDOW IS NULL");
-
-
                 return;
 
         }
@@ -305,15 +306,23 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         {
 
                 LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : SDL FAILED TO GET WINDOW SIZE");
-
-
                 return;
 
         }
 
+        if (WINDOW->SIZE.x != NEW_WINDOW_WIDTH || WINDOW->SIZE.y != NEW_WINDOW_HEIGHT)
+        {
+            WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
+            WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+            UPDATE_PROJECTION_DATA(WINDOW);
+        }
+        else
+        {
+            WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
+            WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+        }
 
-        WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
-        WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+    
 
 
         glViewport(0, 0, NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT);
