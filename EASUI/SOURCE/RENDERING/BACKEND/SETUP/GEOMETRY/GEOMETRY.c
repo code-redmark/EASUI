@@ -44,7 +44,7 @@ const GLuint makeVao(const GPUBuffer vbo, const GPUBuffer ebo)
         GL_FLOAT,
         GL_FALSE,
         vbo.stride,
-        (void*)&vbo.startOffset
+        (void*)vbo.startOffset
     );
 
     glad_glBindVertexArray(0);

@@ -9,6 +9,7 @@ int LoadPrimitives()
 	LoadPrimitiveShaderProgram();
 
 	makeRectangle();
+
 	printf("[LoadPrimitives] Primitives loaded OK\n");
 	return EASUI_OK;
 
@@ -96,20 +97,17 @@ void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, E
 	GLint modelLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, MODEL_MAT_UNIFORM_NAME);
 	GLint viewLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, VIEW_MAT_UNIFORM_NAME);
 	GLint projLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, PROJ_MAT_UNIFORM_NAME);
-	GLint colorLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, FRAGMENT_COLOR_UNIFORM_NAME);
 
 	mat4 viewMatrix;
 	glm_mat4_identity(viewMatrix);
 
-	printf("[RenderRectangle] modelLoc=%d viewLoc=%d projLoc=%d colorLoc=%d\n", modelLocation, viewLocation, projLocation, colorLocation);
-	printf("[RenderRectangle] proj mat: [%f %f %f %f]\n", currentProjMat[0][0], currentProjMat[1][1], currentProjMat[3][0], currentProjMat[3][1]);
-
-	glad_glDisable(GL_DEPTH_TEST);
-	glad_glDisable(GL_CULL_FACE);
+	printf("[RenderRectangle] modelLoc=%d viewLoc=%d projLoc=%d\n", modelLocation, viewLocation, projLocation);
 
 	if (modelLocation != -1) glad_glUniformMatrix4fv(modelLocation, 1, GL_FALSE, (float*)transform);
-	if (viewLocation != -1)   glad_glUniformMatrix4fv(viewLocation,   1, GL_FALSE, (float*)viewMatrix);
-	if (projLocation != -1)   glad_glUniformMatrix4fv(projLocation,   1, GL_FALSE, (GLfloat*)currentProjMat);
+	if (viewLocation != -1)   glad_glUniformMatrix4fv(viewLocation, 1, GL_FALSE, (float*)viewMatrix);
+	if (projLocation != -1)   glad_glUniformMatrix4fv(projLocation, 1, GL_FALSE, (GLfloat*)currentProjMat);
+
+	GLint colorLocation = glad_glGetUniformLocation(RECTANGLE_DATA.PROGRAM, FRAGMENT_COLOR_UNIFORM_NAME);
 	if (colorLocation != -1) glad_glUniform4fv(colorLocation, 1, (float*)color);
 
 	glad_glDrawElements(RECTANGLE_DATA.MODE, RECTANGLE_DATA.INDEX_COUNT, GL_UNSIGNED_INT, (void*)0);

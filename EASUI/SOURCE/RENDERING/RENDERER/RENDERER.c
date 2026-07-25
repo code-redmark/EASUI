@@ -49,17 +49,12 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
 
                         SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
 
-                        WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE(WINDOW);
                         UPDATE_PROJECTION_DATA(WINDOW);
-
-                        glViewport(0, 0, (int)WINDOW->SIZE.x, (int)WINDOW->SIZE.y);
 
                         glClearColor(WINDOW->BG_COLOR.x, WINDOW->BG_COLOR.y, WINDOW->BG_COLOR.z, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                        printf("[EASUI__RENDER_WINDOW] window size: %fx%f\n", WINDOW->SIZE.x, WINDOW->SIZE.y);
-
-                        RenderRectangle((EASUIvec2) { 200.f, 80.f }, 0.f, (EASUIvec2) { 100.f, 100.f }, (EASUIvec3) { 1.f, 0.f, 1.f });
+                        RenderRectangle((EASUIvec2) { 200.f, 80.f }, 0.f, (EASUIvec2) { 100.f, 100.f }, (EASUIvec3) { 1.f, 0.f, 0.f });
 
                         //EASUI_SCREEN* current = WINDOW->ACTIVE_SCREEN != &WINDOW->DEFAULT_SCREEN ? WINDOW->ACTIVE_SCREEN : &WINDOW->DEFAULT_SCREEN;
 

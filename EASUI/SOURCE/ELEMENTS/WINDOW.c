@@ -203,34 +203,47 @@ int START(EASUI_WINDOW* WINDOW)
                                 }
 
 
-                                // [LOAD GLAD]
-                                {
-
-                                        if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+                                        // [LOAD GLAD]
                                         {
 
-                                                SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                                                if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+                                                {
+
+                                                        SDL_DestroyWindow(WINDOW->SDL_WINDOW);
 
 
-                                                SDL_GL_DestroyContext(EASUI__SDL_CONTEXT);
+                                                        SDL_GL_DestroyContext(EASUI__SDL_CONTEXT);
 
 
-                                                LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO LOAD GLAD");
+                                                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO LOAD GLAD");
 
 
-                                                return EASUI_ERROR;
+                                                        return EASUI_ERROR;
+
+                                                }
+
+
+                                                printf("[GLAD] OpenGL loaded\n");
+                                                printf("[GLAD] OpenGL vendor:   %s\n", glGetString(GL_VENDOR));
+                                                printf("[GLAD] OpenGL renderer: %s\n", glGetString(GL_RENDERER));
+                                                printf("[GLAD] OpenGL version:  %s\n", glGetString(GL_VERSION));
+                                                printf("[GLAD] GLSL version:    %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
                                         }
 
-                                }
-                                
                                 EASUI__RENDERING_INIT();
                         }
 
 
-                        SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
+                        if (!SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT))
+                        {
+                                LOG_EASUI_ERROR("FAILED TO START WINDOW : SDL_GL_MAKE_CURRENT FAILED");
+                                SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                                return EASUI_ERROR;
+                        }
+
                         UPDATE_SIZE_AND_CONTEXT_SIZE(WINDOW);
-                        
+
 
                 }
 
