@@ -113,7 +113,8 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 
                 char TYPE;
                 void** ELEMENT_LIST;
-                unsigned short LAST_ELEMENT_INDEX;
+                char IS_EMPTY;
+                short LAST_ELEMENT_INDEX;
                 unsigned short MAX_ELEMENT_COUNT;
                 int (*ADD_ELEMENT)(EASUI_SCREEN* SCREEN, void* ELEMENT);
 

@@ -16,7 +16,6 @@ void EASUI__RENDER_ELEMENT(void* ELEMENT)
         case EASUI_LABEL_NUMBER:
             {
                 EASUI_LABEL* LABEL = (EASUI_LABEL*)ELEMENT;
-                printf("\nRendering label: \n POS: %f, %f\nSIZE: %f, %f\n", LABEL->POSITION.x, LABEL->POSITION.y, LABEL->SIZE.x, LABEL->SIZE.y);
                 RenderRectangle(LABEL->SIZE, 0.f, LABEL->POSITION, (EASUIvec3) { 127.f, 0.f, 255.f });
             };
             break;
@@ -29,7 +28,6 @@ void EASUI__RENDER_ELEMENT(void* ELEMENT)
             break;
     }
 
-    printf("[EASUI__RENDER_ELEMENT] Rendered element of type %d OK\n", TYPE);
 }
 
 int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
@@ -54,28 +52,26 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
                         glClearColor(WINDOW->BG_COLOR.x, WINDOW->BG_COLOR.y, WINDOW->BG_COLOR.z, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                        RenderRectangle((EASUIvec2) { 200.f, 80.f }, 0.f, (EASUIvec2) { 100.f, 100.f }, (EASUIvec3) { 1.f, 0.f, 0.f });
+                        EASUI_SCREEN* CURRENT = WINDOW->ACTIVE_SCREEN != &WINDOW->DEFAULT_SCREEN ? WINDOW->ACTIVE_SCREEN : &WINDOW->DEFAULT_SCREEN;
 
-                        //EASUI_SCREEN* current = WINDOW->ACTIVE_SCREEN != &WINDOW->DEFAULT_SCREEN ? WINDOW->ACTIVE_SCREEN : &WINDOW->DEFAULT_SCREEN;
-
-                        //for (int i = 0; i < current->LAST_ELEMENT_INDEX + 1; i++)
-                        //{
-                        //    if (current->ELEMENT_LIST[i] != NULL) EASUI__RENDER_ELEMENT(current->ELEMENT_LIST[i]);
-                        //}
-
-                        SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
-
-                        GLenum err = glad_glGetError();
-                        if (err != GL_NO_ERROR) printf("[EASUI__RENDER_WINDOW] GL error after render: %d\n", err);
-                        else printf("[EASUI__RENDER_WINDOW] Window rendered OK\n");
-
+                        if (!CURRENT->IS_EMPTY)
+                        {
+                            for (int i = 0; i <= CURRENT->LAST_ELEMENT_INDEX; i++)
+                            {
+                                void* ELEMENT = CURRENT->ELEMENT_LIST[i];
+                                EASUI__RENDER_ELEMENT(ELEMENT);
+                            }
+                        }
                 }
 
+                SDL_GL_SwapWindow(WINDOW->SDL_WINDOW);
+
+                GLenum err = glad_glGetError();
+                if (err != GL_NO_ERROR) printf("[EASUI__RENDER_WINDOW] GL error after render: %d\n", err);
+                
+
         }
-
-
         return EASUI_OK;
-
 }
 
 

@@ -40,7 +40,7 @@ extern GLuint EASUI_PRIMITIVE_SHADER_PROGRAM;
 "\n" \
 "void main()\n" \
 "{\n" \
-"    FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" \
+"    FragColor = uColor;\n" \
 "}\n"
 
 #define MODEL_MAT_UNIFORM_NAME "uModel"

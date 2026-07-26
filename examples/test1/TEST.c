@@ -10,7 +10,7 @@ int main()
 
 
         EASUI_WINDOW WINDOW_1, WINDOW_2, WINDOW_3;
-        EASUI_LABEL LABEL_1;
+        EASUI_LABEL LABEL_1, LABEL_2, LABEL_3;
 
 
         SET_NEW_EASUI_WINDOW(&WINDOW_1, "Window 1", 8, (EASUIvec2){.x = 800, .y = 800}, TRUE);
@@ -22,7 +22,9 @@ int main()
         WINDOW_3.BG_COLOR = (EASUIvec3){ .x = 0.0f, .y = 0.0f, .z = 1.0f };
 
         
-        SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, (EASUIvec2) { 200.f, 200.f }, (EASUIvec2) {100.f, 150.f}, 9, 1024);
+        SET_NEW_EASUI_LABEL(&LABEL_1, &WINDOW_2, (EASUIvec2) { 1.f, 400 }, (EASUIvec2) {200.f, 100.f}, 9, 1024);
+        SET_NEW_EASUI_LABEL(&LABEL_2, &WINDOW_2, (EASUIvec2) { 600.f, 400.f }, (EASUIvec2) { 200.f, 100.f }, 9, 1024);
+        SET_NEW_EASUI_LABEL(&LABEL_3, &WINDOW_2, (EASUIvec2) { 300.f, 400.f }, (EASUIvec2) { 200.f, 100.f }, 9, 1024);
 
 
         WINDOW_1.START(&WINDOW_1);
