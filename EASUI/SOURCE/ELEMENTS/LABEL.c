@@ -17,6 +17,7 @@ int SET_NEW_EASUI_LABEL(EASUI_LABEL* LABEL, void* OPTIONAL__FRAMED_HOLDER, const
                 LABEL->TYPE = EASUI_LABEL_NUMBER;
                 LABEL->POSITION = POSITION;
                 LABEL->SIZE = SIZE;
+                LABEL->TEXT_COLOR = (EASUIColor){ 255, 255, 255, 1 };
                 LABEL->FONT_SIZE = FONT_SIZE;
                 LABEL->MAX_STRING_SIZE = MAX_STRING_SIZE;
                 LABEL->TEST_FUNCTION = TEST_FUNCTION;

@@ -46,7 +46,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
                 WINDOW->START = START;
                 WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE = UPDATE_SIZE_AND_CONTEXT_SIZE;
-                WINDOW->BG_COLOR = (EASUIvec3){.x = 1.0f, .y = 1.0f, .z = 1.0f }; // white
+                WINDOW->BG_COLOR = (EASUIColor){1.0f, 1.0f, 1.0f, 1.0 };
 
         }
 

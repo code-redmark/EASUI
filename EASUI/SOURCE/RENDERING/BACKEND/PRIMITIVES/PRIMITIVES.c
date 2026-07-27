@@ -77,7 +77,7 @@ void makeRectangle()
 	printf("[makeRectangle] Rectangle created OK\n");
 }
 
-void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, EASUIvec3 COLOR)
+void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, EASUIColor COLOR)
 {
 
 	mat4 transform;
@@ -87,7 +87,7 @@ void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, E
 	//glm_rotate(transform, ROTATION, (vec3) { 0.f, 0.f, 1.f });
 	glm_scale(transform, (vec3) { SIZE.x, SIZE.y, 1.f });
 	
-	vec4 color = { COLOR.x, COLOR.y, COLOR.z, 1.f };
+	vec4 color = { COLOR.r / 255.f, COLOR.g / 255.f, COLOR.b / 255.f, COLOR.a };
 
 	glad_glUseProgram(RECTANGLE_DATA.PROGRAM);
 	//ProgramUniformCheck(RECTANGLE_DATA.PROGRAM);
@@ -101,8 +101,6 @@ void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, E
 	mat4 viewMatrix;
 	glm_mat4_identity(viewMatrix);
 
-	printf("[RenderRectangle] modelLoc=%d viewLoc=%d projLoc=%d\n", modelLocation, viewLocation, projLocation);
-
 	if (modelLocation != -1) glad_glUniformMatrix4fv(modelLocation, 1, GL_FALSE, (float*)transform);
 	if (viewLocation != -1)   glad_glUniformMatrix4fv(viewLocation, 1, GL_FALSE, (float*)viewMatrix);
 	if (projLocation != -1)   glad_glUniformMatrix4fv(projLocation, 1, GL_FALSE, (GLfloat*)currentProjMat);
@@ -114,5 +112,4 @@ void RenderRectangle(EASUIvec2 SIZE, const float ROTATION, EASUIvec2 POSITION, E
 
 	GLenum err = glad_glGetError();
 	if (err != GL_NO_ERROR) printf("[RenderRectangle] GL error after draw: %d\n", err);
-	else printf("[RenderRectangle] Rectangle draw call OK\n");
 }

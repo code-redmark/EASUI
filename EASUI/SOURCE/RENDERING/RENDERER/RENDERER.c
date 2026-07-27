@@ -16,7 +16,7 @@ void EASUI__RENDER_ELEMENT(void* ELEMENT)
         case EASUI_LABEL_NUMBER:
             {
                 EASUI_LABEL* LABEL = (EASUI_LABEL*)ELEMENT;
-                RenderRectangle(LABEL->SIZE, 0.f, LABEL->POSITION, (EASUIvec3) { 127.f, 0.f, 255.f });
+                RenderRectangle(LABEL->SIZE, 0.f, LABEL->POSITION, LABEL->TEXT_COLOR);
             };
             break;
         case EASUI_SCREEN_NUMBER:
@@ -49,7 +49,7 @@ int EASUI__RENDER_WINDOW(EASUI_WINDOW* WINDOW)
 
                         UPDATE_PROJECTION_DATA(WINDOW);
 
-                        glClearColor(WINDOW->BG_COLOR.x, WINDOW->BG_COLOR.y, WINDOW->BG_COLOR.z, 1.0f);
+                        glClearColor(WINDOW->BG_COLOR.r, WINDOW->BG_COLOR.g, WINDOW->BG_COLOR.b, WINDOW->BG_COLOR.a);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                         EASUI_SCREEN* CURRENT = WINDOW->ACTIVE_SCREEN != &WINDOW->DEFAULT_SCREEN ? WINDOW->ACTIVE_SCREEN : &WINDOW->DEFAULT_SCREEN;

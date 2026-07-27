@@ -33,7 +33,18 @@ struct EASUIvec3
     float z;
 };
 
+typedef struct EASUIColor EASUIColor;
 
+/*
+    Contains colors in the RGBA format
+*/
+struct EASUIColor // TODO: Make color functions like conversion to different color formats
+{
+    float r;
+    float g;
+    float b;
+    float a;
+};
 
 enum EASUI_ELEMENT_TYPE_NUMBERS
 {
@@ -143,9 +154,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 int (*START)(EASUI_WINDOW* WINDOW);
                 void(*UPDATE_SIZE_AND_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
                 char* TITLE;
-
-                // FOR RENDERING TEST
-                EASUIvec3 BG_COLOR;
+                EASUIColor BG_COLOR;
         };
 
 
@@ -166,6 +175,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 char TYPE;
                 unsigned long MAX_STRING_SIZE;
                 EASUIvec2 POSITION, SIZE;
+                EASUIColor TEXT_COLOR;
                 unsigned int FONT_SIZE;
                 char* TEXT;
                 void (*TEST_FUNCTION)(const EASUI_LABEL* LABEL);

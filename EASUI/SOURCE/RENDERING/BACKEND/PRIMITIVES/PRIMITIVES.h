@@ -24,7 +24,7 @@ void makeRectangle();
 /*
 	Renders a basic rectangle
 */
-void RenderRectangle(EASUIvec2 SIZE,  const float ROTATION, EASUIvec2 POSITION , EASUIvec3 COLOR);
+void RenderRectangle(EASUIvec2 SIZE,  const float ROTATION, EASUIvec2 POSITION, EASUIColor COLOR);
 
 
 
