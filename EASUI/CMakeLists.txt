@@ -40,15 +40,17 @@ FetchContent_MakeAvailable(cglm)
 # === LIBRARY SETUP ===
 
 file(GLOB_RECURSE LIB_CODE "${CMAKE_CURRENT_SOURCE_DIR}/SOURCE/*.c" "${CMAKE_CURRENT_SOURCE_DIR}/SOURCE/*.cpp")
+message(STATUS "LIB_CODE:")
+foreach(file ${LIB_CODE})
+    message(STATUS "  ${file}")
+endforeach()
 
-file(GLOB_RECURSE PRIV_HEAD "${CMAKE_CURRENT_SOURCE_DIR}/PRIVATE_*.h")
-file(GLOB_RECURSE PUB_HEAD "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
+file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 add_library(EASUI STATIC
     ${LIB_CODE}
-    ${PUB_HEAD}
-    ${PRIV_HEAD}
+    ${HEADERS}
 )
 
 target_include_directories(EASUI PUBLIC

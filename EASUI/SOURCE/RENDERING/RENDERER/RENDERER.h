@@ -3,7 +3,7 @@
 
 #include "../../../EASUI.h"
 
-extern OPENGL_PRIMITIVE_DATA* RECTANGLE_DATA;
+
 
 /*
 	Goes through all the of the EASUI_WINDOW's elements

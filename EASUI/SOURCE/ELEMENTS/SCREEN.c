@@ -33,6 +33,7 @@ int SET_NEW_EASUI_SCREEN(EASUI_SCREEN* SCREEN, const unsigned short MAX_ELEMENT_
                 SCREEN->TYPE = EASUI_SCREEN_NUMBER;
                 SCREEN->MAX_ELEMENT_COUNT = MAX_ELEMENT_COUNT;
                 SCREEN->LAST_ELEMENT_INDEX = 0;
+                SCREEN->IS_EMPTY = 1;
                 SCREEN->ADD_ELEMENT = SCREEN_ADD_ELEMENT;
 
         }
@@ -67,24 +68,34 @@ int SET_NEW_EASUI_SCREEN(EASUI_SCREEN* SCREEN, const unsigned short MAX_ELEMENT_
 
 int SCREEN_ADD_ELEMENT(EASUI_SCREEN* SCREEN, void* ELEMENT)
 {
+    int insertIndex;
 
-        const int OFFSET = (SCREEN->ELEMENT_LIST[0] == NULL);
+    if (SCREEN->IS_EMPTY)
+    {
+        insertIndex = 0;
+    }
+    else
+    {
+        insertIndex = SCREEN->LAST_ELEMENT_INDEX + 1;
+    }
 
+    if (insertIndex >= SCREEN->MAX_ELEMENT_COUNT)
+    {
+        LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO SCREEN : ELEMENT COUNT EXCEEDED THE MAXIMUM");
+        return EASUI_ERROR;
+    }
 
-        if (SCREEN->LAST_ELEMENT_INDEX + 1 - OFFSET >= SCREEN->MAX_ELEMENT_COUNT)
-        {
+    SCREEN->ELEMENT_LIST[insertIndex] = ELEMENT;
 
-                LOG_EASUI_ERROR("FAILED TO ADD ELEMENT TO SCREEN : ELEMENT COUNT EXCEEDED THE MAXIMUM");
+    if (SCREEN->IS_EMPTY)
+    {
+        SCREEN->IS_EMPTY = 0;
+        SCREEN->LAST_ELEMENT_INDEX = 0;
+    }
+    else
+    {
+        SCREEN->LAST_ELEMENT_INDEX++;
+    }
 
-
-                return EASUI_ERROR;
-
-        }
-
-
-        SCREEN->ELEMENT_LIST[SCREEN->LAST_ELEMENT_INDEX + 1 - OFFSET] = ELEMENT;
-
-
-        return EASUI_OK;
-
+    return EASUI_OK;
 }

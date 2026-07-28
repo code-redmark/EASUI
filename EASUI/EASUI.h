@@ -4,7 +4,8 @@
 
 #include "SOURCE/MEMORY_ARENA/MEMORY_ARENA_PRIVATE.h"
 
-#include "DEPENDENCIES/GLAD/include/glad/glad.h"
+#include <cglm/cglm.h>
+#include <stdbool.h>
 #include "DEPENDENCIES/COMMON/STRINGS.h"
 #include <SDL3/SDL.h>
 #include <stdio.h>
@@ -13,12 +14,37 @@
 #define EASUI__DEFAULT__REFRESH_RATE 60
 #define EASUI__DEFAULT__MEMORY_ARENA_SIZE 1024
 
-
 #define EASUI_NONE 0
 #define EASUI_ERROR 0
 #define EASUI_OK 1
 
+typedef struct EASUIvec2 EASUIvec2;
+struct EASUIvec2
+{
+    float x;
+    float y;
+};
 
+typedef struct EASUIvec3 EASUIvec3;
+struct EASUIvec3
+{
+    float x;
+    float y;
+    float z;
+};
+
+typedef struct EASUIColor EASUIColor;
+
+/*
+    Contains colors in the RGBA format
+*/
+struct EASUIColor // TODO: Make color functions like conversion to different color formats
+{
+    float r;
+    float g;
+    float b;
+    float a;
+};
 
 enum EASUI_ELEMENT_TYPE_NUMBERS
 {
@@ -56,21 +82,6 @@ typedef struct EASUI_WINDOW EASUI_WINDOW;
 
 extern SDL_GLContext EASUI__SDL_CONTEXT;
 extern unsigned short FRAMETIME_MILLISECONDS;
-
-typedef struct EASUIvec3 EASUIvec3;
-
-struct EASUIvec3 {
-        float x;
-        float y;
-        float z;
-};
-
-typedef struct EASUIvec2 EASUIvec2;
-
-struct EASUIvec2 {
-        float x;
-        float y;
-};
 
 // ================================================== [FUNCTIONS] =================================================
 //
@@ -113,7 +124,8 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
 
                 char TYPE;
                 void** ELEMENT_LIST;
-                unsigned short LAST_ELEMENT_INDEX;
+                char IS_EMPTY;
+                short LAST_ELEMENT_INDEX;
                 unsigned short MAX_ELEMENT_COUNT;
                 int (*ADD_ELEMENT)(EASUI_SCREEN* SCREEN, void* ELEMENT);
 
@@ -142,9 +154,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 int (*START)(EASUI_WINDOW* WINDOW);
                 void(*UPDATE_SIZE_AND_CONTEXT_SIZE)(EASUI_WINDOW* WINDOW);
                 char* TITLE;
-
-                // FOR RENDERING TEST
-                EASUIvec3 BG_COLOR;
+                EASUIColor BG_COLOR;
         };
 
 
@@ -165,6 +175,7 @@ void LOG_EASUI_CRITICAL_ERROR(const char* MESSAGE);
                 char TYPE;
                 unsigned long MAX_STRING_SIZE;
                 EASUIvec2 POSITION, SIZE;
+                EASUIColor TEXT_COLOR;
                 unsigned int FONT_SIZE;
                 char* TEXT;
                 void (*TEST_FUNCTION)(const EASUI_LABEL* LABEL);

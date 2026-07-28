@@ -1,4 +1,6 @@
 #include "../../EASUI.h"
+#include <glad/glad.h>
+#include "../RENDERING/RENDERING.h"
 
 
 
@@ -44,7 +46,7 @@ int SET_NEW_EASUI_WINDOW(EASUI_WINDOW* WINDOW, const char* TITLE, const unsigned
                 WINDOW->ADD_ELEMENT = WINDOW_ADD_ELEMENT;
                 WINDOW->START = START;
                 WINDOW->UPDATE_SIZE_AND_CONTEXT_SIZE = UPDATE_SIZE_AND_CONTEXT_SIZE;
-                WINDOW->BG_COLOR = (EASUIvec3){.x = 1.0f, .y = 1.0f, .z = 1.0f }; // white
+                WINDOW->BG_COLOR = (EASUIColor){1.0f, 1.0f, 1.0f, 1.0 };
 
         }
 
@@ -153,6 +155,13 @@ int START(EASUI_WINDOW* WINDOW)
                 // [CREATE WINDOW]
                 {
 
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+                        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+                        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+                        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+                        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
                         WINDOW->SDL_WINDOW = SDL_CreateWindow(WINDOW->TITLE, WINDOW->SIZE.x, WINDOW->SIZE.y, SDL_WINDOW_FLAGS);
 
 
@@ -194,31 +203,47 @@ int START(EASUI_WINDOW* WINDOW)
                                 }
 
 
-                                // [LOAD GLAD]
-                                {
-
-                                        if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+                                        // [LOAD GLAD]
                                         {
 
-                                                SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                                                if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+                                                {
+
+                                                        SDL_DestroyWindow(WINDOW->SDL_WINDOW);
 
 
-                                                SDL_GL_DestroyContext(EASUI__SDL_CONTEXT);
+                                                        SDL_GL_DestroyContext(EASUI__SDL_CONTEXT);
 
 
-                                                LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO LOAD GLAD");
+                                                        LOG_EASUI_ERROR("FAILED TO START WINDOW : FAILED TO LOAD GLAD");
 
 
-                                                return EASUI_ERROR;
+                                                        return EASUI_ERROR;
+
+                                                }
+
+
+                                                printf("[GLAD] OpenGL loaded\n");
+                                                printf("[GLAD] OpenGL vendor:   %s\n", glGetString(GL_VENDOR));
+                                                printf("[GLAD] OpenGL renderer: %s\n", glGetString(GL_RENDERER));
+                                                printf("[GLAD] OpenGL version:  %s\n", glGetString(GL_VERSION));
+                                                printf("[GLAD] GLSL version:    %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
                                         }
 
-                                }
-
+                                EASUI__RENDERING_INIT();
                         }
 
 
-                        SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT);
+                        if (!SDL_GL_MakeCurrent(WINDOW->SDL_WINDOW, EASUI__SDL_CONTEXT))
+                        {
+                                LOG_EASUI_ERROR("FAILED TO START WINDOW : SDL_GL_MAKE_CURRENT FAILED");
+                                SDL_DestroyWindow(WINDOW->SDL_WINDOW);
+                                return EASUI_ERROR;
+                        }
+
+                        UPDATE_SIZE_AND_CONTEXT_SIZE(WINDOW);
+
 
                 }
 
@@ -282,8 +307,6 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         {
 
                 LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : WINDOW IS NULL");
-
-
                 return;
 
         }
@@ -296,15 +319,23 @@ void UPDATE_SIZE_AND_CONTEXT_SIZE(EASUI_WINDOW* WINDOW)
         {
 
                 LOG_EASUI_ERROR("FAILED TO UPDATE WINDOW CONTEXT SIZE : SDL FAILED TO GET WINDOW SIZE");
-
-
                 return;
 
         }
 
+        if (WINDOW->SIZE.x != NEW_WINDOW_WIDTH || WINDOW->SIZE.y != NEW_WINDOW_HEIGHT)
+        {
+            WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
+            WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+            UPDATE_PROJECTION_DATA(WINDOW);
+        }
+        else
+        {
+            WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
+            WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+        }
 
-        WINDOW->SIZE.x = NEW_WINDOW_WIDTH;
-        WINDOW->SIZE.y = NEW_WINDOW_HEIGHT;
+    
 
 
         glViewport(0, 0, NEW_WINDOW_WIDTH, NEW_WINDOW_HEIGHT);
